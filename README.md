@@ -324,7 +324,6 @@
 
             if (!isValid) return;
 
-            // Gestion de la base de données locale sécurisée par compte
             let users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
             
             if (users[pseudo]) {
@@ -418,7 +417,7 @@
             location.reload();
         }
 
-        // Vérification automatique de session active
+        // Vérification automatique de session au chargement (accès universel sans bug)
         window.onload = function() {
             const activeUser = localStorage.getItem('garcia_current_user');
             if (activeUser) {
@@ -428,4 +427,3 @@
     </script>
 </body>
 </html>
-
