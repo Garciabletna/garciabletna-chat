@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garciabletna - Secure Chat</title>
+    <title>Garciabletna - Secure Chat Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #050505;
+            --bg-color: #030303;
             --neon-green: #00FF66;
-            --neon-glow: 0 0 18px rgba(0, 255, 102, 0.5), 0 0 35px rgba(0, 255, 102, 0.2);
+            --neon-glow: 0 0 20px rgba(0, 255, 102, 0.4), 0 0 40px rgba(0, 255, 102, 0.15);
             --border-green: #00CC52;
-            --card-bg: #0E0E0E;
-            --text-gray: #AAAAAA;
+            --card-bg: #0A0A0A;
+            --text-gray: #999999;
+            --error-red: #FF3333;
         }
 
         body {
@@ -48,9 +49,9 @@
             max-width: 420px;
             background-color: var(--card-bg);
             border: 1px solid #1a1a1a;
-            padding: 25px;
+            padding: 30px 25px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -61,36 +62,44 @@
             color: var(--neon-green);
             text-shadow: var(--neon-glow);
             letter-spacing: 2px;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 20px;
             font-family: 'Cinzel Decorative', cursive, sans-serif;
         }
 
-        /* Champs de saisie */
-        .select-lang, .input-field {
+        .input-field {
             width: 100%;
-            background-color: #141414;
+            background-color: #121212;
             border: 1px solid #222222;
             color: #FFFFFF;
             padding: 14px 16px;
             border-radius: 10px;
             font-size: 1rem;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             outline: none;
             box-sizing: border-box;
             transition: all 0.3s ease;
         }
 
-        .select-lang:focus, .input-field:focus {
+        .input-field:focus {
             border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
         }
 
-        /* Style des accords de confidentialité */
+        .error-msg {
+            color: var(--error-red);
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            text-align: left;
+            width: 100%;
+            display: none;
+        }
+
+        /* Accords de confidentialité */
         .legal-box {
             background-color: #121212;
             border: 1px solid #222222;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             font-size: 0.75rem;
             color: var(--text-gray);
@@ -119,9 +128,9 @@
             cursor: pointer;
         }
 
-        /* Style de l'écran de bienvenue visuel */
+        /* Page de bienvenue visuelle */
         .welcome-emblem {
-            font-size: 3.5rem;
+            font-size: 4rem;
             color: var(--neon-green);
             text-shadow: var(--neon-glow);
             margin: 15px 0;
@@ -130,7 +139,7 @@
         .welcome-text {
             font-size: 0.85rem;
             color: var(--text-gray);
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 25px;
         }
 
@@ -149,16 +158,21 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-primary-salon:active {
+            transform: scale(0.98);
         }
 
         .btn-disabled {
-            background-color: #222222;
-            color: #555555;
+            background-color: #1c1c1c;
+            color: #444444;
             cursor: not-allowed;
             box-shadow: none;
         }
 
-        /* Interface de messagerie */
+        /* Interface de messagerie pro en béton */
         #chat-screen {
             display: none;
             flex-direction: column;
@@ -167,6 +181,7 @@
             height: 100vh;
             background-color: var(--bg-color);
             padding: 0;
+            box-sizing: border-box;
         }
 
         .chat-header {
@@ -200,16 +215,17 @@
 
         .message {
             background-color: var(--card-bg);
-            border: 1px solid #1a1a1a;
-            padding: 10px 14px;
-            border-radius: 10px;
-            max-width: 80%;
+            border: 1px solid #1c1c1c;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 82%;
             text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .message.founder-msg {
             border-color: var(--neon-green);
-            box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.25);
         }
 
         .msg-user {
@@ -217,11 +233,15 @@
             color: var(--neon-green);
             font-weight: bold;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .msg-text {
             font-size: 0.95rem;
             color: #FFFFFF;
+            word-break: break-word;
         }
 
         .chat-input-area {
@@ -236,12 +256,13 @@
 
         .chat-input {
             flex: 1;
-            background-color: #141414;
+            background-color: #121212;
             border: 1px solid #222222;
             color: #FFFFFF;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 12px 15px;
+            border-radius: 10px;
             outline: none;
+            font-size: 0.95rem;
         }
 
         .chat-input:focus {
@@ -253,7 +274,7 @@
             color: #000;
             border: none;
             padding: 0 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: var(--neon-glow);
@@ -263,44 +284,41 @@
             width: 100%;
             max-width: 420px;
             text-align: center;
-            padding: 15px 0;
+            padding: 12px 0;
             font-size: 0.7rem;
             color: var(--text-gray);
             border-top: 1px solid #1a1a1a;
-            margin-top: 15px;
+            margin-top: 10px;
         }
-        footer .founder { color: var(--neon-green); font-weight: bold; margin-bottom: 4px; }
+        footer .founder { color: var(--neon-green); font-weight: bold; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- ÉCRAN 1 : SAISIE DU PSEUDO & MOT DE PASSE (ÉTAPE 1) -->
+    <!-- ÉCRAN 1 : IDENTIFICATION RIGOUROUSE (PSEUDO MINUSCULE & MDP 4-8 CARAC) -->
     <div id="pseudo-screen" class="screen active-screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
-            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 15px;">IDENTIFICATION SÉCURISÉE</div>
+            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 15px; font-weight: bold;">AUTHENTIFICATION DU RÉSEAU</div>
 
-            <select class="select-lang">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-            </select>
+            <input type="text" id="pseudo-input" class="input-field" placeholder="Pseudo (minuscules sans espaces)..." oninput="formatPseudo(this)">
+            <div id="pseudo-error" class="error-msg">⚠️ Pseudo invalide (minuscules, chiffres, min. 3 caractères).</div>
 
-            <input type="text" id="pseudo-input" class="input-field" placeholder="Entrez votre pseudo...">
-            <input type="password" id="password-input" class="input-field" maxlength="8" placeholder="Mot de passe (max 8 carac.)...">
+            <input type="password" id="password-input" class="input-field" maxlength="8" placeholder="Mot de passe (4 à 8 caractères)...">
+            <div id="password-error" class="error-msg">⚠️ Le mot de passe doit contenir entre 4 et 8 caractères.</div>
 
-            <button class="btn-primary-salon" onclick="goToLegalScreen()">
+            <button class="btn-primary-salon" onclick="validateAndProceed()">
                 <span>🔱</span> Suivant : Confidentialité
             </button>
         </div>
 
         <footer>
             <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-            <div class="security-note">Chiffrement actif 2026</div>
+            <div class="security-note">Chiffrement strict 2026</div>
         </footer>
     </div>
 
-    <!-- ÉCRAN 2 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ (ÉTAPE 2) -->
+    <!-- ÉCRAN 2 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ -->
     <div id="legal-screen" class="screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
@@ -328,7 +346,7 @@
         </footer>
     </div>
 
-    <!-- ÉCRAN 3 : PAGE DE BIENVENUE VISUELLE & COMMUNAUTÉ (ÉTAPE 3) -->
+    <!-- ÉCRAN 3 : PAGE DE BIENVENUE VISUELLE -->
     <div id="welcome-visual-screen" class="screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
@@ -350,7 +368,7 @@
         </footer>
     </div>
 
-    <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE (ÉTAPE 4) -->
+    <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE PRO -->
     <div id="chat-screen" class="screen">
         <div class="chat-header">
             <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
@@ -359,31 +377,49 @@
 
         <div class="chat-messages" id="message-box">
             <div class="message founder-msg">
-                <div class="msg-user">Garciabletna 🔱✨</div>
-                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Le réseau est activé.</div>
+                <div class="msg-user">garciabletna 🔱✨</div>
+                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Le chiffrement est actif.</div>
             </div>
         </div>
 
         <div class="chat-input-area">
-            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message...">
+            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message..." onkeypress="checkEnter(event)">
             <button class="btn-send" onclick="sendMessage()">Envoyer</button>
         </div>
     </div>
 
     <script>
-        function goToLegalScreen() {
+        // Force automatiquement le pseudo en minuscules (style Instagram) et supprime les espaces
+        function formatPseudo(input) {
+            input.value = input.value.toLowerCase().replace(/\s+/g, '');
+        }
+
+        function validateAndProceed() {
             const pseudo = document.getElementById('pseudo-input').value.trim();
             const password = document.getElementById('password-input').value.trim();
+            
+            let isValid = true;
 
-            if(pseudo === "" || pseudo.length < 3) {
-                alert("Veuillez entrer un pseudo valide (minimum 3 caractères) !");
-                return;
-            }
-            if(password === "" || password.length > 8) {
-                alert("Veuillez entrer un mot de passe (maximum 8 caractères) !");
-                return;
+            // Validation rigoureuse du pseudo (minimum 3 caractères, minuscules/chiffres uniquement)
+            const pseudoRegex = /^[a-z0-9_]{3,}$/;
+            if (!pseudoRegex.test(pseudo)) {
+                document.getElementById('pseudo-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('pseudo-error').style.display = 'none';
             }
 
+            // Validation rigoureuse du mot de passe (entre 4 et 8 caractères stricts)
+            if (password.length < 4 || password.length > 8) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+
+            if (!isValid) return;
+
+            // Passage à l'écran de confidentialité
             document.getElementById('pseudo-screen').classList.remove('active-screen');
             document.getElementById('legal-screen').classList.add('active-screen');
         }
@@ -412,6 +448,12 @@
             document.getElementById('display-pseudo').innerText = "@" + pseudo;
         }
 
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
         function sendMessage() {
             const input = document.getElementById('user-message');
             const text = input.value.trim();
@@ -421,7 +463,7 @@
             const msgDiv = document.createElement('div');
             msgDiv.className = 'message';
             msgDiv.innerHTML = `
-                <div class="msg-user">${document.getElementById('display-pseudo').innerText}</div>
+                <div class="msg-user">@${document.getElementById('pseudo-input').value}</div>
                 <div class="msg-text">${text}</div>
             `;
             box.appendChild(msgDiv);
