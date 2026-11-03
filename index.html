@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garciabletna - Secure Chat</title>
-    <!-- Importation d'une police de style gothique/chicano moderne -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,7 +12,7 @@
             --neon-glow: 0 0 18px rgba(0, 255, 102, 0.5), 0 0 35px rgba(0, 255, 102, 0.2);
             --border-green: #00CC52;
             --card-bg: #0E0E0E;
-            --text-gray: #999999;
+            --text-gray: #AAAAAA;
         }
 
         body {
@@ -21,37 +20,83 @@
             color: #FFFFFF;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
             justify-content: space-between;
             align-items: center;
         }
 
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .active-screen {
+            display: flex;
+        }
+
         .main-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             background-color: var(--card-bg);
             border: 1px solid #1a1a1a;
-            padding: 30px 20px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 30px;
         }
 
         h1 {
             color: var(--neon-green);
             text-shadow: var(--neon-glow);
             letter-spacing: 2px;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             text-align: center;
             font-family: 'Cinzel Decorative', cursive, sans-serif;
-            text-transform: none; /* Respecte exactement les minuscules/majuscules voulues */
+        }
+
+        /* Style des accords de confidentialité */
+        .legal-box {
+            background-color: #121212;
+            border: 1px solid #222222;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            max-height: 140px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+
+        .checkbox-container input {
+            accent-color: var(--neon-green);
+            margin-top: 2px;
+            cursor: pointer;
         }
 
         .select-lang, .input-pseudo {
@@ -84,74 +129,253 @@
             font-weight: 800;
             cursor: pointer;
             box-shadow: var(--neon-glow);
-            transition: transform 0.2s ease, opacity 0.2s ease;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
-            margin-top: 5px;
         }
 
-        .btn-primary-salon:active {
-            transform: scale(0.98);
-            opacity: 0.9;
+        .btn-disabled {
+            background-color: #222222;
+            color: #555555;
+            cursor: not-allowed;
+            box-shadow: none;
         }
 
-        .trident-badge {
-            font-size: 1.2rem;
-        }
-
-        /* Footer et mentions légales / sécurité */
-        footer {
+        /* Interface de messagerie */
+        #chat-screen {
+            display: none;
+            flex-direction: column;
             width: 100%;
-            max-width: 400px;
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.75rem;
-            color: var(--text-gray);
-            border-top: 1px solid #1a1a1a;
-            margin-top: 30px;
+            max-width: 500px;
+            height: 100vh;
+            background-color: var(--bg-color);
+            padding: 0;
         }
 
-        footer .founder {
+        .chat-header {
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chat-title {
+            color: var(--neon-green);
+            font-family: 'Cinzel Decorative', cursive, sans-serif;
+            font-size: 1.1rem;
+            text-shadow: var(--neon-glow);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .message {
+            background-color: var(--card-bg);
+            border: 1px solid #1a1a1a;
+            padding: 10px 14px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.founder-msg {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
+        }
+
+        .msg-user {
+            font-size: 0.75rem;
             color: var(--neon-green);
             font-weight: bold;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
+            margin-bottom: 4px;
         }
 
-        footer .security-note {
-            line-height: 1.4;
-            color: #777777;
+        .msg-text {
+            font-size: 0.95rem;
+            color: #FFFFFF;
         }
+
+        .chat-input-area {
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chat-input {
+            flex: 1;
+            background-color: #141414;
+            border: 1px solid #222222;
+            color: #FFFFFF;
+            padding: 12px;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--neon-green);
+        }
+
+        .btn-send {
+            background-color: var(--neon-green);
+            color: #000;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: var(--neon-glow);
+        }
+
+        footer {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            border-top: 1px solid #1a1a1a;
+            margin-top: 15px;
+        }
+        footer .founder { color: var(--neon-green); font-weight: bold; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+    <!-- ÉCRAN 1 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ -->
+    <div id="legal-screen" class="screen active-screen">
+        <div class="main-container">
+            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 10px; font-weight: bold;">ACCORD DE SÉCURITÉ & CONFIDENTIALITÉ</div>
+            
+            <div class="legal-box">
+                En accédant à la plateforme Garciabletna, vous certifiez respecter l'intégrité du réseau. L'utilisation de faux profils, l'usurpation d'identité, toute tentative de piratage, d'injection de code malveillant ou de contournement des protocoles de sécurité est formellement interdite. 
+                <br><br>
+                Tout contrevenant fera l'objet de poursuites judiciaires immédiates devant les juridictions compétentes. Propriété exclusive de Garciabletna.
+            </div>
 
-        <select class="select-lang">
-            <option value="fr">Français</option>
-            <option value="en">English</option>
-            <option value="es">Español</option>
-        </select>
+            <label class="checkbox-container">
+                <input type="checkbox" id="accept-terms" onchange="toggleLegalButton()">
+                <span>J'accepte les conditions de sécurité et les accords de confidentialité 2026.</span>
+            </label>
 
-        <input type="text" class="input-pseudo" placeholder="Entre ton pseudo...">
+            <button id="btn-proceed" class="btn-primary-salon btn-disabled" onclick="goToWelcomeScreen()" disabled>
+                Continuer 🔱
+            </button>
+        </div>
 
-        <button class="btn-primary-salon" onclick="alert('Bienvenue fondateur Garciabletna !\nConnexion sécurisée aux serveurs...')">
-            <span class="trident-badge">🔱</span> Rejoindre le Salon
-        </button>
+        <footer>
+            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+            <div class="security-note">Chiffrement de bout en bout • Protection VPN active</div>
+        </footer>
     </div>
 
-    <footer>
-        <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-        <div class="security-note">
-            Protocole de sécurité 2026. Chiffrement de bout en bout, compatibilité VPN active et respect des normes de confidentialité strictes.
-        </div>
-    </footer>
+    <!-- ÉCRAN 2 : BIENVENUE & SAISIE DU PSEUDO -->
+    <div id="welcome-screen" class="screen">
+        <div class="main-container">
+            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+            <div style="font-size: 0.9rem; color: #FFFFFF; margin-bottom: 20px; text-align: center;">Espace Sécurisé Officiel</div>
 
+            <select class="select-lang">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+
+            <input type="text" id="pseudo-input" class="input-pseudo" placeholder="Entre ton pseudo...">
+
+            <button class="btn-primary-salon" onclick="enterChat()">
+                <span>🔱</span> Rejoindre le Salon
+            </button>
+        </div>
+
+        <footer>
+            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+            <div class="security-note">Protocole 2026 validé</div>
+        </footer>
+    </div>
+
+    <!-- ÉCRAN 3 : INTERFACE DE MESSAGERIE INTERNE -->
+    <div id="chat-screen" class="screen">
+        <div class="chat-header">
+            <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
+            <span style="font-size: 0.8rem; color: var(--neon-green);" id="display-pseudo"></span>
+        </div>
+
+        <div class="chat-messages" id="message-box">
+            <div class="message founder-msg">
+                <div class="msg-user">Garciabletna 🔱✨</div>
+                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Accords de sécurité validés avec succès.</div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message...">
+            <button class="btn-send" onclick="sendMessage()">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleLegalButton() {
+            const checkbox = document.getElementById('accept-terms');
+            const btn = document.getElementById('btn-proceed');
+            if (checkbox.checked) {
+                btn.classList.remove('btn-disabled');
+                btn.removeAttribute('disabled');
+            } else {
+                btn.classList.add('btn-disabled');
+                btn.setAttribute('disabled', 'true');
+            }
+        }
+
+        function goToWelcomeScreen() {
+            document.getElementById('legal-screen').classList.remove('active-screen');
+            document.getElementById('welcome-screen').classList.add('active-screen');
+        }
+
+        function enterChat() {
+            const pseudo = document.getElementById('pseudo-input').value.trim();
+            if(pseudo === "") {
+                alert("Entre un pseudo valide s'il te plaît !");
+                return;
+            }
+            document.getElementById('welcome-screen').classList.remove('active-screen');
+            document.getElementById('chat-screen').classList.add('active-screen');
+            document.getElementById('display-pseudo').innerText = "@" + pseudo;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('user-message');
+            const text = input.value.trim();
+            if(text === "") return;
+
+            const box = document.getElementById('message-box');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.innerHTML = `
+                <div class="msg-user">${document.getElementById('display-pseudo').innerText}</div>
+                <div class="msg-text">${text}</div>
+            `;
+            box.appendChild(msgDiv);
+            input.value = "";
+            box.scrollTop = box.scrollHeight;
+        }
+    </script>
 </body>
 </html>
-
 
