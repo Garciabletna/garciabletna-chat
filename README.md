@@ -3,426 +3,528 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garciabletna - Secure Elite Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <title>Garcia Bletna - Chat & Social</title>
     <style>
         :root {
-            --bg-color: #030303;
-            --neon-green: #00FF66;
-            --neon-glow: 0 0 20px rgba(0, 255, 102, 0.3);
-            --card-bg: #0A0A0A;
-            --border-color: #1a1a1a;
-            --text-gray: #888888;
-            --error-red: #FF3333;
+            --primary-bg: #000000;
+            --card-bg: #121212;
+            --text-color: #ffffff;
+            --text-secondary: #8e8e8e;
+            --neon-green: #00ff66;
+            --border-color: #262626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: #FFFFFF;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
             display: flex;
-            flex-direction: column;
-            height: 100vh;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            min-height: 100vh;
         }
 
-        .screen {
-            display: none;
+        .app-container {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            max-height: 932px;
+            background-color: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- ÉCRAN DE DÉMARRAGE (SPLASH SCREEN) --- */
+        #splash-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100%;
-            max-width: 480px;
-            padding: 20px;
-            box-sizing: border-box;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
         }
 
-        .active-screen {
+        .splash-logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--text-color);
+            text-shadow: 0 0 15px var(--neon-green);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
             display: flex;
-        }
-
-        .screen#app-screen {
-            justify-content: flex-start;
-            padding: 0;
-            height: 100vh;
-        }
-
-        .main-container {
-            width: 100%;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 30px 25px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
-            display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 5px;
+        }
+
+        .splash-logo span {
+            color: var(--neon-green);
+        }
+
+        .splash-footer {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- ÉCRAN DE CONNEXION --- */
+        #auth-screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            height: 100%;
             text-align: center;
         }
 
-        h1 {
+        #auth-screen h1 {
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            font-size: 3rem;
             color: var(--neon-green);
-            text-shadow: var(--neon-glow);
-            letter-spacing: 2px;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            font-family: 'Cinzel Decorative', cursive, sans-serif;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
         }
 
-        .input-field {
+        .auth-input {
             width: 100%;
-            background-color: #121212;
-            border: 1px solid #222222;
-            color: #FFFFFF;
-            padding: 14px 16px;
-            border-radius: 10px;
-            font-size: 1rem;
-            margin-bottom: 12px;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
-        }
-
-        .error-msg {
-            color: var(--error-red);
-            font-size: 0.75rem;
-            margin-bottom: 12px;
-            text-align: left;
-            width: 100%;
-            display: none;
-        }
-
-        .btn-primary {
-            width: 100%;
-            background-color: var(--neon-green);
-            color: #000000;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: var(--neon-glow);
-            transition: transform 0.1s ease;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        /* Style Interface Instagram / Réseau Social */
-        .app-header {
-            width: 100%;
-            padding: 15px 20px;
+            padding: 12px;
+            margin-bottom: 15px;
             background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--neon-green);
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+        }
+
+        /* --- INTERFACE PRINCIPALE (INSTAGRAM STYLE) --- */
+        #main-app {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-sizing: border-box;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .app-content {
+        .app-title {
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .content-body {
             flex: 1;
-            width: 100%;
             overflow-y: auto;
             padding: 15px;
-            box-sizing: border-box;
-            display: none;
         }
 
-        .app-content.active-tab {
-            display: block;
+        /* Profil Section */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        /* Barre de navigation inférieure style Insta */
-        .nav-bar {
+        .avatar-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 8px var(--neon-green);
+        }
+
+        .avatar-container img {
             width: 100%;
-            max-width: 480px;
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border-color);
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-container input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Trident Lumineux (Certification) */
+        .trident-badge {
+            width: 18px;
+            height: 18px;
+            fill: var(--neon-green);
+            filter: drop-shadow(0 0 5px var(--neon-green));
+        }
+
+        .edit-name-input {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 1rem;
+            display: none;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .stats-row {
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            box-sizing: border-box;
+            text-align: center;
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .stat-item .number {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--neon-green);
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            border-color: var(--neon-green);
+        }
+
+        /* --- BARRE DE NAVIGATION INFÉRIEURE (VERT FONCÉ) --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 60px;
+            background-color: #051a0b; /* Vert foncé */
+            border-top: 1px solid #004d1a;
         }
 
         .nav-item {
             background: none;
             border: none;
-            color: var(--text-gray);
-            font-size: 1.3rem;
             cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .nav-item.active {
-            color: var(--neon-green);
-            text-shadow: var(--neon-glow);
-        }
-
-        /* Cartes de profil / Feed */
-        .profile-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-        }
-
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            background-color: #1a1a1a;
-            border: 1px solid var(--neon-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: var(--neon-green);
-            font-weight: bold;
+            opacity: 0.8;
+            transition: opacity 0.2s;
         }
 
-        .btn-follow {
-            background-color: transparent;
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
+        .nav-item:hover, .nav-item.active {
+            opacity: 1;
+            text-shadow: 0 0 8px var(--neon-green);
         }
 
-        .btn-follow.following {
-            background-color: var(--neon-green);
-            color: #000;
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--neon-green);
         }
 
-        footer {
-            width: 100%;
-            max-width: 480px;
-            text-align: center;
-            padding: 10px 0;
+        .nav-item span {
             font-size: 0.65rem;
-            color: var(--text-gray);
-            border-top: 1px solid var(--border-color);
+            margin-top: 3px;
         }
     </style>
 </head>
 <body>
 
-    <!-- ÉCRAN 1 : AUTHENTIFICATION / CONNEXION SÉCURISÉE -->
-    <div id="auth-screen" class="screen active-screen">
-        <div class="main-container">
-            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
-            <div style="font-size: 0.8rem; color: var(--neon-green); margin-bottom: 15px; font-weight: bold;">ACCÈS MONDIAL SÉCURISÉ</div>
-
-            <input type="text" id="pseudo-input" class="input-field" placeholder="Pseudo (minuscules, sans espaces)..." oninput="formatPseudo(this)">
-            <div id="pseudo-error" class="error-msg">⚠️ Min. 3 caractères (lettres/chiffres).</div>
-
-            <input type="password" id="password-input" class="input-field" maxlength="8" placeholder="Mot de passe (4 à 8 caractères)...">
-            <div id="password-error" class="error-msg">⚠️ Le mot de passe doit contenir entre 4 et 8 caractères.</div>
-
-            <button class="btn-primary" onclick="handleAuth()">
-                Connexion / Inscription 🔱
-            </button>
-        </div>
-        <footer>PROPRIÉTÉ DE GARCIABLETNA — RÉSEAU D'ÉLITE 2026</footer>
-    </div>
-
-    <!-- ÉCRAN 2 : INTERFACE PRINCIPALE (STYLE INSTAGRAM / RÉSEAU) -->
-    <div id="app-screen" class="screen">
-        <div class="app-header">
-            <span style="font-family: 'Cinzel Decorative', cursive; color: var(--neon-green); font-size: 1.1rem;">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
-            <span id="current-user-badge" style="font-size: 0.8rem; color: var(--neon-green); font-weight: bold;"></span>
+    <div class="app-container">
+        
+        <!-- 1. ÉCRAN DE DÉMARRAGE -->
+        <div id="splash-screen">
+            <div class="splash-logo">G 🔱 G</div>
+            <div class="splash-footer">Développé par Garcia Bletna</div>
         </div>
 
-        <!-- Onglet 1 : Accueil / Feed -->
-        <div id="tab-feed" class="app-content active-tab">
-            <div style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 15px;">Fil d'actualité sécurisé de la communauté</div>
-            <div class="profile-card">
-                <div class="profile-info">
-                    <div class="avatar">G</div>
-                    <div>
-                        <div style="font-weight: bold; font-size: 0.9rem;">garciabletna</div>
-                        <div style="font-size: 0.75rem; color: var(--text-gray);">Fondateur du réseau</div>
+        <!-- 2. ÉCRAN DE CONNEXION -->
+        <div id="auth-screen">
+            <h1>Garcia Bletna</h1>
+            <input type="text" id="username-input" class="auth-input" placeholder="Entrez votre nom d'utilisateur">
+            <button class="auth-btn" onclick="login()">Se connecter / S'inscrire</button>
+        </div>
+
+        <!-- 3. INTERFACE PRINCIPALE -->
+        <div id="main-app">
+            <header>
+                <div class="app-title">garciabletna</div>
+                <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            </header>
+
+            <div class="content-body">
+                <!-- Section Profil -->
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        <img id="profile-pic" src="https://via.placeholder.com/150/121212/00ff66?text=GG" alt="Profil">
+                        <input type="file" accept="image/*" onchange="changeProfilePic(event)" title="Changer la photo">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name-row">
+                            <span id="display-name" class="profile-name">Utilisateur</span>
+                            <!-- Icône Trident Néon Vert (Certification) -->
+                            <svg class="trident-badge" viewBox="0 0 24 24"><path d="M12 2v6m-4-3l4 3 4-3M12 8v14m-5-4l5 2 5-2"/></svg>
+                        </div>
+                        <input type="text" id="edit-name-input" class="edit-name-input" placeholder="Nouveau nom..." onblur="saveName()">
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">Appuyez sur la photo pour la modifier</p>
                     </div>
                 </div>
-                <span style="font-size: 0.75rem; color: var(--neon-green);">Officiel</span>
+
+                <!-- Tableau de bord (Abonnés / Suivis) -->
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="number" id="posts-count">0</div>
+                        <div class="label">publications</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number" id="followers-count">0</div>
+                        <div class="label">abonnés</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number" id="following-count">120</div>
+                        <div class="label">suivis</div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="action-btn" onclick="toggleEditName()">Modifier le profil</button>
+                    <button class="action-btn" onclick="simulateFollow()">S'abonner / Se désabonner</button>
+                </div>
             </div>
-            <div id="feed-container"></div>
+
+            <!-- Barre de navigation inférieure (Vert foncé) -->
+            <nav class="bottom-nav">
+                <button class="nav-item active">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    <span>Accueil</span>
+                </button>
+                <button class="nav-item">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    <span>Discussion</span>
+                </button>
+                <button class="nav-item">
+                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <span>Appel</span>
+                </button>
+            </nav>
         </div>
 
-        <!-- Onglet 2 : Recherche de Profils -->
-        <div id="tab-search" class="app-content">
-            <input type="text" id="search-input" class="input-field" placeholder="🔍 Rechercher un membre par son pseudo..." oninput="searchProfiles(this)">
-            <div id="search-results" style="margin-top: 10px;">
-                <!-- Les résultats de recherche s'afficheront ici -->
-            </div>
-        </div>
-
-        <!-- Onglet 3 : Profil Personnel -->
-        <div id="tab-profile" class="app-content" style="text-align: center; padding-top: 30px;">
-            <div class="avatar" style="width: 80px; height: 80px; margin: 0 auto 15px; font-size: 2rem;" id="profile-initial">G</div>
-            <h2 id="profile-pseudo-display" style="color: var(--neon-green); margin-bottom: 5px;">@pseudo</h2>
-            <p style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 25px;">Membre authentifié du réseau Garciabletna</p>
-            <button class="btn-primary" style="background-color: #1a1a1a; color: var(--error-red); border: 1px solid var(--error-red);" onclick="logout()">Déconnexion</button>
-        </div>
-
-        <!-- Barre de Navigation de Style Instagram -->
-        <div class="nav-bar">
-            <button class="nav-item active" onclick="switchTab('feed', this)">🏠</button>
-            <button class="nav-item" onclick="switchTab('search', this)">🔍</button>
-            <button class="nav-item" onclick="switchTab('profile', this)">👤</button>
-        </div>
     </div>
 
     <script>
-        function formatPseudo(input) {
-            input.value = input.value.toLowerCase().replace(/\s+/g, '');
-        }
+        // Gestion du SplashScreen (disparaît après 2.5 secondes)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    checkAuth();
+                }, 500);
+            }, 2500);
+        });
 
-        function handleAuth() {
-            const pseudo = document.getElementById('pseudo-input').value.trim();
-            const password = document.getElementById('password-input').value.trim();
-            let isValid = true;
-
-            const pseudoRegex = /^[a-z0-9_]{3,}$/;
-            if (!pseudoRegex.test(pseudo)) {
-                document.getElementById('pseudo-error').style.display = 'block';
-                isValid = false;
+        function checkAuth() {
+            const savedUser = localStorage.getItem('garciabletna_user');
+            if (savedUser) {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+                loadUserData(savedUser);
             } else {
-                document.getElementById('pseudo-error').style.display = 'none';
-            }
-
-            if (password.length < 4 || password.length > 8) {
-                document.getElementById('password-error').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('password-error').style.display = 'none';
-            }
-
-            if (!isValid) return;
-
-            let users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
-            
-            if (users[pseudo]) {
-                if (users[pseudo] !== password) {
-                    alert("⚠️ Mot de passe incorrect pour ce pseudo !");
-                    return;
-                }
-            } else {
-                users[pseudo] = password;
-                localStorage.setItem('garcia_users', JSON.stringify(users));
-            }
-
-            localStorage.setItem('garcia_current_user', pseudo);
-            initApp(pseudo);
-        }
-
-        function initApp(pseudo) {
-            document.getElementById('auth-screen').classList.remove('active-screen');
-            document.getElementById('app-screen').classList.add('active-screen');
-            document.getElementById('current-user-badge').innerText = "@" + pseudo;
-            document.getElementById('profile-pseudo-display').innerText = "@" + pseudo;
-            document.getElementById('profile-initial').innerText = pseudo.charAt(0).toUpperCase();
-            loadMockUsers(pseudo);
-        }
-
-        function switchTab(tabName, btnElement) {
-            document.querySelectorAll('.app-content').forEach(el => el.classList.remove('active-tab'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-
-            if (tabName === 'feed') document.getElementById('tab-feed').classList.add('active-tab');
-            if (tabName === 'search') document.getElementById('tab-search').classList.add('active-tab');
-            if (tabName === 'profile') document.getElementById('tab-profile').classList.add('active-tab');
-
-            btnElement.classList.add('active');
-        }
-
-        function loadMockUsers(currentUser) {
-            const container = document.getElementById('search-results');
-            const users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
-            
-            container.innerHTML = "";
-            for (let p in users) {
-                if (p !== currentUser) {
-                    container.innerHTML += `
-                        <div class="profile-card">
-                            <div class="profile-info">
-                                <div class="avatar">${p.charAt(0).toUpperCase()}</div>
-                                <div style="font-weight: bold;">@${p}</div>
-                            </div>
-                            <button class="btn-follow" onclick="toggleFollow(this)">S'abonner</button>
-                        </div>
-                    `;
-                }
+                document.getElementById('auth-screen').style.display = 'flex';
             }
         }
 
-        function searchProfiles(input) {
-            const query = input.value.toLowerCase();
-            const container = document.getElementById('search-results');
-            const users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
-            const currentUser = localStorage.getItem('garcia_current_user');
-
-            container.innerHTML = "";
-            for (let p in users) {
-                if (p !== currentUser && p.includes(query)) {
-                    container.innerHTML += `
-                        <div class="profile-card">
-                            <div class="profile-info">
-                                <div class="avatar">${p.charAt(0).toUpperCase()}</div>
-                                <div style="font-weight: bold;">@${p}</div>
-                            </div>
-                            <button class="btn-follow" onclick="toggleFollow(this)">S'abonner</button>
-                        </div>
-                    `;
-                }
+        function login() {
+            const usernameInput = document.getElementById('username-input').value.trim();
+            if (!usernameInput) {
+                alert("Veuillez entrer un nom d'utilisateur");
+                return;
             }
-        }
-
-        function toggleFollow(btn) {
-            if (btn.innerText === "S'abonner") {
-                btn.innerText = "Abonné(e)";
-                btn.classList.add('following');
-            } else {
-                btn.innerText = "S'abonner";
-                btn.classList.remove('following');
-            }
+            localStorage.setItem('garciabletna_user', usernameInput);
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            loadUserData(usernameInput);
         }
 
         function logout() {
-            localStorage.removeItem('garcia_current_user');
-            location.reload();
+            localStorage.removeItem('garciabletna_user');
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('auth-screen').style.display = 'flex';
         }
 
-        // Vérification automatique de session au chargement (accès universel sans bug)
-        window.onload = function() {
-            const activeUser = localStorage.getItem('garcia_current_user');
-            if (activeUser) {
-                initApp(activeUser);
+        function loadUserData(username) {
+            document.getElementById('display-name').innerText = username;
+
+            // Compteur intelligent avec privilège Fondateur ("Garcia Bletna")
+            const followersEl = document.getElementById('followers-count');
+            if (username.toLowerCase() === "garcia bletna" || username.toLowerCase() === "garciabletna") {
+                followersEl.innerText = "X"; // Accès illimité / Spécial fondateur
+            } else {
+                let savedFollowers = localStorage.getItem('followers_' + username);
+                if (!savedFollowers) {
+                    savedFollowers = Math.floor(Math.random() * 50) + 1;
+                    localStorage.setItem('followers_' + username, savedFollowers);
+                }
+                followersEl.innerText = savedFollowers;
             }
+
+            // Charger l'image de profil sauvegardée
+            const savedPic = localStorage.getItem('profile_pic_' + username);
+            if (savedPic) {
+                document.getElementById('profile-pic').src = savedPic;
+            }
+        }
+
+        // Modification de la photo de profil
+        function changeProfilePic(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    document.getElementById('profile-pic').src = base64Image;
+                    const username = localStorage.getItem('garciabletna_user');
+                    localStorage.setItem('profile_pic_' + username, base64Image);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Édition du nom de profil
+        function toggleEditName() {
+            const nameSpan = document.getElementById('display-name');
+            const nameInput = document.getElementById('edit-name-input');
+            if (nameInput.style.display === 'block') {
+                nameInput.style.display = 'none';
+                nameSpan.style.display = 'block';
+            } else {
+                nameInput.style.display = 'block';
+                nameInput.value = nameSpan.innerText;
+                nameSpan.style.display = 'none';
+                nameInput.focus();
+            }
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('edit-name-input');
+            const newName = nameInput.value.trim();
+            if (newName) {
+                document.getElementById('display-name').innerText = newName;
+                localStorage.setItem('garciabletna_user', newName);
+            }
+            nameInput.style.display = 'none';
+            document.getElementById('display-name').style.display = 'block';
+        }
+
+        // Simulation d'abonnement / désabonnement intelligent pour les utilisateurs standards
+        let isFollowing = false;
+        function simulateFollow() {
+            const username = localStorage.getItem('garciabletna_user');
+            if (username.toLowerCase() === "garcia bletna" || username.toLowerCase() === "garciabletna") {
+                alert("En tant que fondateur, vos abonnés sont illimités (X) !");
+                return;
+            }
+
+            let currentFollowers = parseInt(localStorage.getItem('followers_' + username)) || 0;
+            if (isFollowing) {
+                currentFollowers -= 1;
+                isFollowing = false;
+                alert("Vous vous êtes désabonné.");
+            } else {
+                currentFollowers += 1;
+                isFollowing = true;
+                alert("Vous vous êtes abonné !");
+            }
+            localStorage.setItem('followers_' + username, currentFollowers);
+            document.getElementById('followers-count').innerText = currentFollowers;
         }
     </script>
 </body>
