@@ -27,6 +27,7 @@
             height: 100vh;
             justify-content: space-between;
             align-items: center;
+            overflow: hidden;
         }
 
         .screen {
@@ -42,6 +43,13 @@
 
         .active-screen {
             display: flex;
+        }
+
+        /* Correction pour l'affichage plein écran du chat */
+        .screen#chat-screen {
+            justify-content: flex-start;
+            padding: 0;
+            max-width: 500px;
         }
 
         .main-container {
@@ -172,18 +180,7 @@
             box-shadow: none;
         }
 
-        /* Interface de messagerie pro en béton */
-        #chat-screen {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            max-width: 500px;
-            height: 100vh;
-            background-color: var(--bg-color);
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* Interface de messagerie ultra-moderne */
         .chat-header {
             padding: 15px 20px;
             background-color: var(--card-bg);
@@ -195,6 +192,11 @@
             box-sizing: border-box;
         }
 
+        .chat-title-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
         .chat-title {
             color: var(--neon-green);
             font-family: 'Cinzel Decorative', cursive, sans-serif;
@@ -202,30 +204,62 @@
             text-shadow: var(--neon-glow);
         }
 
+        .chat-status {
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-green);
+        }
+
         .chat-messages {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             width: 100%;
             box-sizing: border-box;
+            background: radial-gradient(circle at center, #070707 0%, #030303 100%);
         }
 
         .message {
-            background-color: var(--card-bg);
-            border: 1px solid #1c1c1c;
+            background-color: #121212;
+            border: 1px solid #1f1f1f;
             padding: 12px 16px;
-            border-radius: 12px;
+            border-radius: 14px;
             max-width: 82%;
             text-align: left;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: relative;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .message.founder-msg {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.25);
+            border-color: rgba(0, 255, 102, 0.4);
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.15);
+            background-color: #0d120f;
+        }
+
+        /* Style pour les messages envoyés par l'utilisateur connecté */
+        .message.user-msg {
+            align-self: flex-end;
+            background-color: #051a0d;
+            border-color: var(--border-green);
         }
 
         .msg-user {
@@ -234,18 +268,26 @@
             font-weight: bold;
             margin-bottom: 4px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 4px;
+            gap: 10px;
+        }
+
+        .msg-time {
+            font-size: 0.65rem;
+            color: var(--text-gray);
+            font-weight: normal;
         }
 
         .msg-text {
             font-size: 0.95rem;
             color: #FFFFFF;
             word-break: break-word;
+            line-height: 1.4;
         }
 
         .chat-input-area {
-            padding: 15px;
+            padding: 15px 20px;
             background-color: var(--card-bg);
             border-top: 1px solid #1a1a1a;
             display: flex;
@@ -259,25 +301,32 @@
             background-color: #121212;
             border: 1px solid #222222;
             color: #FFFFFF;
-            padding: 12px 15px;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
             outline: none;
             font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
         .chat-input:focus {
             border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
         }
 
         .btn-send {
             background-color: var(--neon-green);
             color: #000;
             border: none;
-            padding: 0 20px;
-            border-radius: 10px;
+            padding: 0 22px;
+            border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: var(--neon-glow);
+            transition: transform 0.1s ease;
+        }
+
+        .btn-send:active {
+            transform: scale(0.95);
         }
 
         footer {
@@ -295,7 +344,7 @@
 </head>
 <body>
 
-    <!-- ÉCRAN 1 : IDENTIFICATION RIGOUROUSE (PSEUDO MINUSCULE & MDP 4-8 CARAC) -->
+    <!-- ÉCRAN 1 : IDENTIFICATION RIGOUROUSE -->
     <div id="pseudo-screen" class="screen active-screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
@@ -371,25 +420,30 @@
     <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE PRO -->
     <div id="chat-screen" class="screen">
         <div class="chat-header">
-            <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
-            <span style="font-size: 0.8rem; color: var(--neon-green);" id="display-pseudo"></span>
+            <div class="chat-title-wrapper">
+                <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
+                <span class="chat-status"><span class="status-dot"></span> Sécurisé & Chiffré de bout en bout</span>
+            </div>
+            <span style="font-size: 0.8rem; color: var(--neon-green); font-weight: bold;" id="display-pseudo"></span>
         </div>
 
         <div class="chat-messages" id="message-box">
             <div class="message founder-msg">
-                <div class="msg-user">garciabletna 🔱✨</div>
-                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Le chiffrement est actif.</div>
+                <div class="msg-user">
+                    <span>garciabletna 🔱✨</span>
+                    <span class="msg-time">Maintenant</span>
+                </div>
+                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Le réseau d'élite est actif. Envoie ton premier message !</div>
             </div>
         </div>
 
         <div class="chat-input-area">
-            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message..." onkeypress="checkEnter(event)">
+            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message sécurisé..." onkeypress="checkEnter(event)">
             <button class="btn-send" onclick="sendMessage()">Envoyer</button>
         </div>
     </div>
 
     <script>
-        // Force automatiquement le pseudo en minuscules (style Instagram) et supprime les espaces
         function formatPseudo(input) {
             input.value = input.value.toLowerCase().replace(/\s+/g, '');
         }
@@ -400,7 +454,6 @@
             
             let isValid = true;
 
-            // Validation rigoureuse du pseudo (minimum 3 caractères, minuscules/chiffres uniquement)
             const pseudoRegex = /^[a-z0-9_]{3,}$/;
             if (!pseudoRegex.test(pseudo)) {
                 document.getElementById('pseudo-error').style.display = 'block';
@@ -409,7 +462,6 @@
                 document.getElementById('pseudo-error').style.display = 'none';
             }
 
-            // Validation rigoureuse du mot de passe (entre 4 et 8 caractères stricts)
             if (password.length < 4 || password.length > 8) {
                 document.getElementById('password-error').style.display = 'block';
                 isValid = false;
@@ -419,7 +471,6 @@
 
             if (!isValid) return;
 
-            // Passage à l'écran de confidentialité
             document.getElementById('pseudo-screen').classList.remove('active-screen');
             document.getElementById('legal-screen').classList.add('active-screen');
         }
@@ -454,19 +505,33 @@
             }
         }
 
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+
         function sendMessage() {
             const input = document.getElementById('user-message');
             const text = input.value.trim();
             if(text === "") return;
 
             const box = document.getElementById('message-box');
+            const pseudo = document.getElementById('pseudo-input').value;
+            const timeStr = getCurrentTime();
+
+            // Création du message utilisateur (aligné à droite)
             const msgDiv = document.createElement('div');
-            msgDiv.className = 'message';
+            msgDiv.className = 'message user-msg';
             msgDiv.innerHTML = `
-                <div class="msg-user">@${document.getElementById('pseudo-input').value}</div>
+                <div class="msg-user">
+                    <span>@${pseudo}</span>
+                    <span class="msg-time">${timeStr}</span>
+                </div>
                 <div class="msg-text">${text}</div>
             `;
             box.appendChild(msgDiv);
+            
+            // Réinitialisation de l'input et scroll automatique au bas
             input.value = "";
             box.scrollTop = box.scrollHeight;
         }
