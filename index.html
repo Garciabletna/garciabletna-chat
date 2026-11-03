@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garciabletna - Messagerie</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: #161b22;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            width: 90%;
+            max-width: 400px;
+        }
+        /* Style Néon Doux pour le logo Garciabletna */
+        .neon-logo {
+            font-family: 'Courier New', Courier, monospace; /* Style brut/gangster minimaliste */
+            font-size: 28px;
+            font-weight: bold;
+            color: #2ea043; /* Vert doux et non agressif */
+            text-shadow: 0 0 8px rgba(46, 160, 67, 0.4);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #238636;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo Néon Garciabletna -->
+        <div class="neon-logo">GARCIABLETNA</div>
+        
+        <!-- Sélecteur de langues universel -->
+        <select id="languageSelect">
+            <option value="fr">Français</option>
+            <option value="en">English (Anglais)</option>
+            <option value="es">Español (Espagnol)</option>
+            <option value="ar">العربية (Arabe)</option>
+            <option value="zh">中文 (Chinois)</option>
+        </select>
+
+        <!-- Formulaire de connexion basique -->
+        <input type="text" id="username" placeholder="Entre ton pseudo...">
+        <button onclick="enterChat()">Rejoindre le Salon 🔱</button>
+    </div>
+
+    <script>
+        function enterChat() {
+            const user = document.getElementById('username').value;
+            if(user.trim() === "") {
+                alert("Entre un pseudo pour continuer !");
+            } else {
+                alert("Bienvenue fondateur " + user + " ! Connexion aux serveurs de Garciabletna...");
+            }
+        }
+    </script>
+
+</body>
+</html>
