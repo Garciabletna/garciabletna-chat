@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garciabletna - Secure Chat Elite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
+    <title>Garciabletna - Secure Elite Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #030303;
             --neon-green: #00FF66;
-            --neon-glow: 0 0 20px rgba(0, 255, 102, 0.4), 0 0 40px rgba(0, 255, 102, 0.15);
-            --border-green: #00CC52;
+            --neon-glow: 0 0 20px rgba(0, 255, 102, 0.3);
             --card-bg: #0A0A0A;
-            --text-gray: #999999;
+            --border-color: #1a1a1a;
+            --text-gray: #888888;
             --error-red: #FF3333;
         }
 
@@ -37,6 +37,7 @@
             align-items: center;
             height: 100vh;
             width: 100%;
+            max-width: 480px;
             padding: 20px;
             box-sizing: border-box;
         }
@@ -45,18 +46,16 @@
             display: flex;
         }
 
-        /* Correction pour l'affichage plein écran du chat */
-        .screen#chat-screen {
+        .screen#app-screen {
             justify-content: flex-start;
             padding: 0;
-            max-width: 500px;
+            height: 100vh;
         }
 
         .main-container {
             width: 100%;
-            max-width: 420px;
             background-color: var(--card-bg);
-            border: 1px solid #1a1a1a;
+            border: 1px solid var(--border-color);
             padding: 30px 25px;
             border-radius: 16px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
@@ -70,7 +69,7 @@
             color: var(--neon-green);
             text-shadow: var(--neon-glow);
             letter-spacing: 2px;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 20px;
             font-family: 'Cinzel Decorative', cursive, sans-serif;
         }
@@ -91,7 +90,7 @@
 
         .input-field:focus {
             border-color: var(--neon-green);
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
         }
 
         .error-msg {
@@ -103,343 +102,198 @@
             display: none;
         }
 
-        /* Accords de confidentialité */
-        .legal-box {
-            background-color: #121212;
-            border: 1px solid #222222;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            color: var(--text-gray);
-            max-height: 130px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            line-height: 1.4;
-            text-align: justify;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: #FFFFFF;
-            margin-bottom: 20px;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-        }
-
-        .checkbox-container input {
-            accent-color: var(--neon-green);
-            margin-top: 2px;
-            cursor: pointer;
-        }
-
-        /* Page de bienvenue visuelle */
-        .welcome-emblem {
-            font-size: 4rem;
-            color: var(--neon-green);
-            text-shadow: var(--neon-glow);
-            margin: 15px 0;
-        }
-
-        .welcome-text {
-            font-size: 0.85rem;
-            color: var(--text-gray);
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        .btn-primary-salon {
+        .btn-primary {
             width: 100%;
             background-color: var(--neon-green);
             color: #000000;
             border: none;
-            padding: 15px;
+            padding: 14px;
             border-radius: 10px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 800;
             cursor: pointer;
             box-shadow: var(--neon-glow);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
             transition: transform 0.1s ease;
         }
 
-        .btn-primary-salon:active {
+        .btn-primary:active {
             transform: scale(0.98);
         }
 
-        .btn-disabled {
-            background-color: #1c1c1c;
-            color: #444444;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        /* Interface de messagerie ultra-moderne */
-        .chat-header {
+        /* Style Interface Instagram / Réseau Social */
+        .app-header {
+            width: 100%;
             padding: 15px 20px;
             background-color: var(--card-bg);
-            border-bottom: 1px solid #1a1a1a;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
             box-sizing: border-box;
         }
 
-        .chat-title-wrapper {
-            display: flex;
-            flex-direction: column;
+        .app-content {
+            flex: 1;
+            width: 100%;
+            overflow-y: auto;
+            padding: 15px;
+            box-sizing: border-box;
+            display: none;
         }
 
-        .chat-title {
+        .app-content.active-tab {
+            display: block;
+        }
+
+        /* Barre de navigation inférieure style Insta */
+        .nav-bar {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-sizing: border-box;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
             color: var(--neon-green);
-            font-family: 'Cinzel Decorative', cursive, sans-serif;
-            font-size: 1.1rem;
             text-shadow: var(--neon-glow);
         }
 
-        .chat-status {
-            font-size: 0.7rem;
-            color: var(--text-gray);
+        /* Cartes de profil / Feed */
+        .profile-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: space-between;
         }
 
-        .status-dot {
-            width: 7px;
-            height: 7px;
-            background-color: var(--neon-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--neon-green);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
+        .profile-info {
             display: flex;
-            flex-direction: column;
-            gap: 14px;
-            width: 100%;
-            box-sizing: border-box;
-            background: radial-gradient(circle at center, #070707 0%, #030303 100%);
+            align-items: center;
+            gap: 12px;
         }
 
-        .message {
-            background-color: #121212;
-            border: 1px solid #1f1f1f;
-            padding: 12px 16px;
-            border-radius: 14px;
-            max-width: 82%;
-            text-align: left;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            position: relative;
-            animation: fadeIn 0.25s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.founder-msg {
-            border-color: rgba(0, 255, 102, 0.4);
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.15);
-            background-color: #0d120f;
-        }
-
-        /* Style pour les messages envoyés par l'utilisateur connecté */
-        .message.user-msg {
-            align-self: flex-end;
-            background-color: #051a0d;
-            border-color: var(--border-green);
-        }
-
-        .msg-user {
-            font-size: 0.75rem;
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background-color: #1a1a1a;
+            border: 1px solid var(--neon-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--neon-green);
             font-weight: bold;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
         }
 
-        .msg-time {
-            font-size: 0.65rem;
-            color: var(--text-gray);
-            font-weight: normal;
-        }
-
-        .msg-text {
-            font-size: 0.95rem;
-            color: #FFFFFF;
-            word-break: break-word;
-            line-height: 1.4;
-        }
-
-        .chat-input-area {
-            padding: 15px 20px;
-            background-color: var(--card-bg);
-            border-top: 1px solid #1a1a1a;
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .chat-input {
-            flex: 1;
-            background-color: #121212;
-            border: 1px solid #222222;
-            color: #FFFFFF;
-            padding: 12px 16px;
-            border-radius: 12px;
-            outline: none;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input:focus {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
-        }
-
-        .btn-send {
-            background-color: var(--neon-green);
-            color: #000;
-            border: none;
-            padding: 0 22px;
-            border-radius: 12px;
+        .btn-follow {
+            background-color: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: var(--neon-glow);
-            transition: transform 0.1s ease;
         }
 
-        .btn-send:active {
-            transform: scale(0.95);
+        .btn-follow.following {
+            background-color: var(--neon-green);
+            color: #000;
         }
 
         footer {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             text-align: center;
-            padding: 12px 0;
-            font-size: 0.7rem;
+            padding: 10px 0;
+            font-size: 0.65rem;
             color: var(--text-gray);
-            border-top: 1px solid #1a1a1a;
-            margin-top: 10px;
+            border-top: 1px solid var(--border-color);
         }
-        footer .founder { color: var(--neon-green); font-weight: bold; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <!-- ÉCRAN 1 : IDENTIFICATION RIGOUROUSE -->
-    <div id="pseudo-screen" class="screen active-screen">
+    <!-- ÉCRAN 1 : AUTHENTIFICATION / CONNEXION SÉCURISÉE -->
+    <div id="auth-screen" class="screen active-screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
-            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 15px; font-weight: bold;">AUTHENTIFICATION DU RÉSEAU</div>
+            <div style="font-size: 0.8rem; color: var(--neon-green); margin-bottom: 15px; font-weight: bold;">ACCÈS MONDIAL SÉCURISÉ</div>
 
-            <input type="text" id="pseudo-input" class="input-field" placeholder="Pseudo (minuscules sans espaces)..." oninput="formatPseudo(this)">
-            <div id="pseudo-error" class="error-msg">⚠️ Pseudo invalide (minuscules, chiffres, min. 3 caractères).</div>
+            <input type="text" id="pseudo-input" class="input-field" placeholder="Pseudo (minuscules, sans espaces)..." oninput="formatPseudo(this)">
+            <div id="pseudo-error" class="error-msg">⚠️ Min. 3 caractères (lettres/chiffres).</div>
 
             <input type="password" id="password-input" class="input-field" maxlength="8" placeholder="Mot de passe (4 à 8 caractères)...">
             <div id="password-error" class="error-msg">⚠️ Le mot de passe doit contenir entre 4 et 8 caractères.</div>
 
-            <button class="btn-primary-salon" onclick="validateAndProceed()">
-                <span>🔱</span> Suivant : Confidentialité
+            <button class="btn-primary" onclick="handleAuth()">
+                Connexion / Inscription 🔱
             </button>
         </div>
-
-        <footer>
-            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-            <div class="security-note">Chiffrement strict 2026</div>
-        </footer>
+        <footer>PROPRIÉTÉ DE GARCIABLETNA — RÉSEAU D'ÉLITE 2026</footer>
     </div>
 
-    <!-- ÉCRAN 2 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ -->
-    <div id="legal-screen" class="screen">
-        <div class="main-container">
-            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
-            <div style="font-size: 0.8rem; color: var(--neon-green); margin-bottom: 10px; font-weight: bold;">ACCORD DE SÉCURITÉ & CONFIDENTIALITÉ</div>
-            
-            <div class="legal-box">
-                En accédant à la plateforme Garciabletna, vous certifiez respecter l'intégrité du réseau. L'utilisation de faux profils, l'usurpation d'identité, toute tentative de piratage, d'injection de code malveillant ou de contournement des protocoles de sécurité est formellement interdite. 
-                <br><br>
-                Tout contrevenant fera l'objet de poursuites judiciaires immédiates devant les juridictions compétentes. Propriété exclusive de Garciabletna.
-            </div>
-
-            <label class="checkbox-container">
-                <input type="checkbox" id="accept-terms" onchange="toggleLegalButton()">
-                <span>J'accepte les conditions de sécurité et les accords de confidentialité 2026.</span>
-            </label>
-
-            <button id="btn-proceed" class="btn-primary-salon btn-disabled" onclick="goToWelcomeScreen()" disabled>
-                Valider & Continuer 🔱
-            </button>
+    <!-- ÉCRAN 2 : INTERFACE PRINCIPALE (STYLE INSTAGRAM / RÉSEAU) -->
+    <div id="app-screen" class="screen">
+        <div class="app-header">
+            <span style="font-family: 'Cinzel Decorative', cursive; color: var(--neon-green); font-size: 1.1rem;">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
+            <span id="current-user-badge" style="font-size: 0.8rem; color: var(--neon-green); font-weight: bold;"></span>
         </div>
 
-        <footer>
-            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-            <div class="security-note">Protection VPN active</div>
-        </footer>
-    </div>
-
-    <!-- ÉCRAN 3 : PAGE DE BIENVENUE VISUELLE -->
-    <div id="welcome-visual-screen" class="screen">
-        <div class="main-container">
-            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
-            
-            <div class="welcome-emblem">🔱</div>
-            
-            <div class="welcome-text">
-                Bienvenue dans l'univers exclusif et sécurisé. Un espace épuré, pur et moderne réservé à une communauté connectée d'élite.
-            </div>
-
-            <button class="btn-primary-salon" onclick="enterChat()">
-                Entrer dans le Salon 🔱
-            </button>
-        </div>
-
-        <footer>
-            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-            <div class="security-note">Communauté Officielle 2026</div>
-        </footer>
-    </div>
-
-    <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE PRO -->
-    <div id="chat-screen" class="screen">
-        <div class="chat-header">
-            <div class="chat-title-wrapper">
-                <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
-                <span class="chat-status"><span class="status-dot"></span> Sécurisé & Chiffré de bout en bout</span>
-            </div>
-            <span style="font-size: 0.8rem; color: var(--neon-green); font-weight: bold;" id="display-pseudo"></span>
-        </div>
-
-        <div class="chat-messages" id="message-box">
-            <div class="message founder-msg">
-                <div class="msg-user">
-                    <span>garciabletna 🔱✨</span>
-                    <span class="msg-time">Maintenant</span>
+        <!-- Onglet 1 : Accueil / Feed -->
+        <div id="tab-feed" class="app-content active-tab">
+            <div style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 15px;">Fil d'actualité sécurisé de la communauté</div>
+            <div class="profile-card">
+                <div class="profile-info">
+                    <div class="avatar">G</div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 0.9rem;">garciabletna</div>
+                        <div style="font-size: 0.75rem; color: var(--text-gray);">Fondateur du réseau</div>
+                    </div>
                 </div>
-                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Le réseau d'élite est actif. Envoie ton premier message !</div>
+                <span style="font-size: 0.75rem; color: var(--neon-green);">Officiel</span>
+            </div>
+            <div id="feed-container"></div>
+        </div>
+
+        <!-- Onglet 2 : Recherche de Profils -->
+        <div id="tab-search" class="app-content">
+            <input type="text" id="search-input" class="input-field" placeholder="🔍 Rechercher un membre par son pseudo..." oninput="searchProfiles(this)">
+            <div id="search-results" style="margin-top: 10px;">
+                <!-- Les résultats de recherche s'afficheront ici -->
             </div>
         </div>
 
-        <div class="chat-input-area">
-            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message sécurisé..." onkeypress="checkEnter(event)">
-            <button class="btn-send" onclick="sendMessage()">Envoyer</button>
+        <!-- Onglet 3 : Profil Personnel -->
+        <div id="tab-profile" class="app-content" style="text-align: center; padding-top: 30px;">
+            <div class="avatar" style="width: 80px; height: 80px; margin: 0 auto 15px; font-size: 2rem;" id="profile-initial">G</div>
+            <h2 id="profile-pseudo-display" style="color: var(--neon-green); margin-bottom: 5px;">@pseudo</h2>
+            <p style="font-size: 0.8rem; color: var(--text-gray); margin-bottom: 25px;">Membre authentifié du réseau Garciabletna</p>
+            <button class="btn-primary" style="background-color: #1a1a1a; color: var(--error-red); border: 1px solid var(--error-red);" onclick="logout()">Déconnexion</button>
+        </div>
+
+        <!-- Barre de Navigation de Style Instagram -->
+        <div class="nav-bar">
+            <button class="nav-item active" onclick="switchTab('feed', this)">🏠</button>
+            <button class="nav-item" onclick="switchTab('search', this)">🔍</button>
+            <button class="nav-item" onclick="switchTab('profile', this)">👤</button>
         </div>
     </div>
 
@@ -448,10 +302,9 @@
             input.value = input.value.toLowerCase().replace(/\s+/g, '');
         }
 
-        function validateAndProceed() {
+        function handleAuth() {
             const pseudo = document.getElementById('pseudo-input').value.trim();
             const password = document.getElementById('password-input').value.trim();
-            
             let isValid = true;
 
             const pseudoRegex = /^[a-z0-9_]{3,}$/;
@@ -471,69 +324,105 @@
 
             if (!isValid) return;
 
-            document.getElementById('pseudo-screen').classList.remove('active-screen');
-            document.getElementById('legal-screen').classList.add('active-screen');
-        }
-
-        function toggleLegalButton() {
-            const checkbox = document.getElementById('accept-terms');
-            const btn = document.getElementById('btn-proceed');
-            if (checkbox.checked) {
-                btn.classList.remove('btn-disabled');
-                btn.removeAttribute('disabled');
-            } else {
-                btn.classList.add('btn-disabled');
-                btn.setAttribute('disabled', 'true');
-            }
-        }
-
-        function goToWelcomeScreen() {
-            document.getElementById('legal-screen').classList.remove('active-screen');
-            document.getElementById('welcome-visual-screen').classList.add('active-screen');
-        }
-
-        function enterChat() {
-            const pseudo = document.getElementById('pseudo-input').value.trim();
-            document.getElementById('welcome-visual-screen').classList.remove('active-screen');
-            document.getElementById('chat-screen').classList.add('active-screen');
-            document.getElementById('display-pseudo').innerText = "@" + pseudo;
-        }
-
-        function checkEnter(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        function getCurrentTime() {
-            const now = new Date();
-            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('user-message');
-            const text = input.value.trim();
-            if(text === "") return;
-
-            const box = document.getElementById('message-box');
-            const pseudo = document.getElementById('pseudo-input').value;
-            const timeStr = getCurrentTime();
-
-            // Création du message utilisateur (aligné à droite)
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message user-msg';
-            msgDiv.innerHTML = `
-                <div class="msg-user">
-                    <span>@${pseudo}</span>
-                    <span class="msg-time">${timeStr}</span>
-                </div>
-                <div class="msg-text">${text}</div>
-            `;
-            box.appendChild(msgDiv);
+            let users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
             
-            // Réinitialisation de l'input et scroll automatique au bas
-            input.value = "";
-            box.scrollTop = box.scrollHeight;
+            if (users[pseudo]) {
+                if (users[pseudo] !== password) {
+                    alert("⚠️ Mot de passe incorrect pour ce pseudo !");
+                    return;
+                }
+            } else {
+                users[pseudo] = password;
+                localStorage.setItem('garcia_users', JSON.stringify(users));
+            }
+
+            localStorage.setItem('garcia_current_user', pseudo);
+            initApp(pseudo);
+        }
+
+        function initApp(pseudo) {
+            document.getElementById('auth-screen').classList.remove('active-screen');
+            document.getElementById('app-screen').classList.add('active-screen');
+            document.getElementById('current-user-badge').innerText = "@" + pseudo;
+            document.getElementById('profile-pseudo-display').innerText = "@" + pseudo;
+            document.getElementById('profile-initial').innerText = pseudo.charAt(0).toUpperCase();
+            loadMockUsers(pseudo);
+        }
+
+        function switchTab(tabName, btnElement) {
+            document.querySelectorAll('.app-content').forEach(el => el.classList.remove('active-tab'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            if (tabName === 'feed') document.getElementById('tab-feed').classList.add('active-tab');
+            if (tabName === 'search') document.getElementById('tab-search').classList.add('active-tab');
+            if (tabName === 'profile') document.getElementById('tab-profile').classList.add('active-tab');
+
+            btnElement.classList.add('active');
+        }
+
+        function loadMockUsers(currentUser) {
+            const container = document.getElementById('search-results');
+            const users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
+            
+            container.innerHTML = "";
+            for (let p in users) {
+                if (p !== currentUser) {
+                    container.innerHTML += `
+                        <div class="profile-card">
+                            <div class="profile-info">
+                                <div class="avatar">${p.charAt(0).toUpperCase()}</div>
+                                <div style="font-weight: bold;">@${p}</div>
+                            </div>
+                            <button class="btn-follow" onclick="toggleFollow(this)">S'abonner</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function searchProfiles(input) {
+            const query = input.value.toLowerCase();
+            const container = document.getElementById('search-results');
+            const users = JSON.parse(localStorage.getItem('garcia_users') || '{}');
+            const currentUser = localStorage.getItem('garcia_current_user');
+
+            container.innerHTML = "";
+            for (let p in users) {
+                if (p !== currentUser && p.includes(query)) {
+                    container.innerHTML += `
+                        <div class="profile-card">
+                            <div class="profile-info">
+                                <div class="avatar">${p.charAt(0).toUpperCase()}</div>
+                                <div style="font-weight: bold;">@${p}</div>
+                            </div>
+                            <button class="btn-follow" onclick="toggleFollow(this)">S'abonner</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function toggleFollow(btn) {
+            if (btn.innerText === "S'abonner") {
+                btn.innerText = "Abonné(e)";
+                btn.classList.add('following');
+            } else {
+                btn.innerText = "S'abonner";
+                btn.classList.remove('following');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('garcia_current_user');
+            location.reload();
+        }
+
+        // Vérification automatique de session au chargement (accès universel sans bug)
+        window.onload = function() {
+            const activeUser = localStorage.getItem('garcia_current_user');
+            if (activeUser) {
+                initApp(activeUser);
+            }
         }
     </script>
 </body>
