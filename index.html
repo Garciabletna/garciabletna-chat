@@ -66,6 +66,26 @@
             font-family: 'Cinzel Decorative', cursive, sans-serif;
         }
 
+        /* Champs de saisie */
+        .select-lang, .input-field {
+            width: 100%;
+            background-color: #141414;
+            border: 1px solid #222222;
+            color: #FFFFFF;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .select-lang:focus, .input-field:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+        }
+
         /* Style des accords de confidentialité */
         .legal-box {
             background-color: #121212;
@@ -74,7 +94,7 @@
             border-radius: 8px;
             font-size: 0.75rem;
             color: var(--text-gray);
-            max-height: 140px;
+            max-height: 130px;
             overflow-y: auto;
             margin-bottom: 15px;
             line-height: 1.4;
@@ -112,25 +132,6 @@
             color: var(--text-gray);
             line-height: 1.5;
             margin-bottom: 25px;
-        }
-
-        .select-lang, .input-pseudo {
-            width: 100%;
-            background-color: #141414;
-            border: 1px solid #222222;
-            color: #FFFFFF;
-            padding: 14px 16px;
-            border-radius: 10px;
-            font-size: 1rem;
-            margin-bottom: 18px;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        .select-lang:focus, .input-pseudo:focus {
-            border-color: var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
         }
 
         .btn-primary-salon {
@@ -273,8 +274,34 @@
 </head>
 <body>
 
-    <!-- ÉCRAN 1 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ -->
-    <div id="legal-screen" class="screen active-screen">
+    <!-- ÉCRAN 1 : SAISIE DU PSEUDO & MOT DE PASSE (ÉTAPE 1) -->
+    <div id="pseudo-screen" class="screen active-screen">
+        <div class="main-container">
+            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 15px;">IDENTIFICATION SÉCURISÉE</div>
+
+            <select class="select-lang">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+
+            <input type="text" id="pseudo-input" class="input-field" placeholder="Entrez votre pseudo...">
+            <input type="password" id="password-input" class="input-field" maxlength="8" placeholder="Mot de passe (max 8 carac.)...">
+
+            <button class="btn-primary-salon" onclick="goToLegalScreen()">
+                <span>🔱</span> Suivant : Confidentialité
+            </button>
+        </div>
+
+        <footer>
+            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+            <div class="security-note">Chiffrement actif 2026</div>
+        </footer>
+    </div>
+
+    <!-- ÉCRAN 2 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ (ÉTAPE 2) -->
+    <div id="legal-screen" class="screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
             <div style="font-size: 0.8rem; color: var(--neon-green); margin-bottom: 10px; font-weight: bold;">ACCORD DE SÉCURITÉ & CONFIDENTIALITÉ</div>
@@ -291,17 +318,17 @@
             </label>
 
             <button id="btn-proceed" class="btn-primary-salon btn-disabled" onclick="goToWelcomeScreen()" disabled>
-                Continuer 🔱
+                Valider & Continuer 🔱
             </button>
         </div>
 
         <footer>
             <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-            <div class="security-note">Chiffrement de bout en bout • Protection VPN active</div>
+            <div class="security-note">Protection VPN active</div>
         </footer>
     </div>
 
-    <!-- ÉCRAN 2 : PAGE DE BIENVENUE VISUELLE & COMMUNAUTÉ -->
+    <!-- ÉCRAN 3 : PAGE DE BIENVENUE VISUELLE & COMMUNAUTÉ (ÉTAPE 3) -->
     <div id="welcome-visual-screen" class="screen">
         <div class="main-container">
             <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
@@ -312,8 +339,8 @@
                 Bienvenue dans l'univers exclusif et sécurisé. Un espace épuré, pur et moderne réservé à une communauté connectée d'élite.
             </div>
 
-            <button class="btn-primary-salon" onclick="goToPseudoScreen()">
-                Entrer dans l'application 🔱
+            <button class="btn-primary-salon" onclick="enterChat()">
+                Entrer dans le Salon 🔱
             </button>
         </div>
 
@@ -323,32 +350,7 @@
         </footer>
     </div>
 
-    <!-- ÉCRAN 3 : SAISIE DU PSEUDO (ANTI-DOUBLONS) -->
-    <div id="pseudo-screen" class="screen">
-        <div class="main-container">
-            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
-            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 20px;">CRÉATION DE VOTRE IDENTIFIANT</div>
-
-            <select class="select-lang">
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-            </select>
-
-            <input type="text" id="pseudo-input" class="input-pseudo" placeholder="Entrez votre pseudo unique...">
-
-            <button class="btn-primary-salon" onclick="enterChat()">
-                <span>🔱</span> Valider et Rejoindre
-            </button>
-        </div>
-
-        <footer>
-            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
-            <div class="security-note">Vérification d'unicité active</div>
-        </footer>
-    </div>
-
-    <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE -->
+    <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE (ÉTAPE 4) -->
     <div id="chat-screen" class="screen">
         <div class="chat-header">
             <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
@@ -369,6 +371,23 @@
     </div>
 
     <script>
+        function goToLegalScreen() {
+            const pseudo = document.getElementById('pseudo-input').value.trim();
+            const password = document.getElementById('password-input').value.trim();
+
+            if(pseudo === "" || pseudo.length < 3) {
+                alert("Veuillez entrer un pseudo valide (minimum 3 caractères) !");
+                return;
+            }
+            if(password === "" || password.length > 8) {
+                alert("Veuillez entrer un mot de passe (maximum 8 caractères) !");
+                return;
+            }
+
+            document.getElementById('pseudo-screen').classList.remove('active-screen');
+            document.getElementById('legal-screen').classList.add('active-screen');
+        }
+
         function toggleLegalButton() {
             const checkbox = document.getElementById('accept-terms');
             const btn = document.getElementById('btn-proceed');
@@ -386,18 +405,9 @@
             document.getElementById('welcome-visual-screen').classList.add('active-screen');
         }
 
-        function goToPseudoScreen() {
-            document.getElementById('welcome-visual-screen').classList.remove('active-screen');
-            document.getElementById('pseudo-screen').classList.add('active-screen');
-        }
-
         function enterChat() {
             const pseudo = document.getElementById('pseudo-input').value.trim();
-            if(pseudo === "" || pseudo.length < 3) {
-                alert("Veuillez entrer un pseudo valide (minimum 3 caractères) !");
-                return;
-            }
-            document.getElementById('pseudo-screen').classList.remove('active-screen');
+            document.getElementById('welcome-visual-screen').classList.remove('active-screen');
             document.getElementById('chat-screen').classList.add('active-screen');
             document.getElementById('display-pseudo').innerText = "@" + pseudo;
         }
@@ -421,5 +431,3 @@
     </script>
 </body>
 </html>
-
-
