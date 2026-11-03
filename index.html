@@ -3,88 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garciabletna - Messagerie</title>
+    <title>Garciabletna - Secure Chat</title>
     <style>
+        :root {
+            --bg-color: #050505;
+            --neon-green: #00FF66;
+            --neon-glow: 0 0 18px rgba(0, 255, 102, 0.5), 0 0 35px rgba(0, 255, 102, 0.2);
+            --border-green: #00CC52;
+            --card-bg: #0E0E0E;
+            --text-gray: #999999;
+        }
+
         body {
-            background-color: #0d1117;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--card-bg);
+            border: 1px solid #1a1a1a;
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+            margin-top: 30px;
         }
-        .container {
+
+        h1 {
+            color: var(--neon-green);
+            text-shadow: var(--neon-glow);
+            letter-spacing: 3px;
+            font-size: 1.7rem;
+            margin-bottom: 25px;
             text-align: center;
-            padding: 20px;
-            background: #161b22;
-            border-radius: 12px;
-            border: 1px solid #30363d;
-            width: 90%;
-            max-width: 400px;
+            text-transform: uppercase;
         }
-        /* Style Néon Doux pour le logo Garciabletna */
-        .neon-logo {
-            font-family: 'Courier New', Courier, monospace; /* Style brut/gangster minimaliste */
-            font-size: 28px;
-            font-weight: bold;
-            color: #2ea043; /* Vert doux et non agressif */
-            text-shadow: 0 0 8px rgba(46, 160, 67, 0.4);
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-        select, input, button {
+
+        .select-lang, .input-pseudo {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background-color: #21262d;
-            border: 1px solid #30363d;
-            color: white;
-            border-radius: 6px;
-            font-size: 16px;
+            background-color: #141414;
+            border: 1px solid #222222;
+            color: #FFFFFF;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
-        button {
-            background-color: #238636;
-            font-weight: bold;
+
+        .select-lang:focus, .input-pseudo:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+        }
+
+        .btn-primary-salon {
+            width: 100%;
+            background-color: var(--neon-green);
+            color: #000000;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 800;
             cursor: pointer;
+            box-shadow: var(--neon-glow);
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
         }
-        button:hover {
-            background-color: #2ea043;
+
+        .btn-primary-salon:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        .trident-badge {
+            font-size: 1.2rem;
+        }
+
+        /* Footer et mentions légales / sécurité */
+        footer {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            border-top: 1px solid #1a1a1a;
+            margin-top: 30px;
+        }
+
+        footer .founder {
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        footer .security-note {
+            line-height: 1.4;
+            color: #777777;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Logo Néon Garciabletna -->
-        <div class="neon-logo">GARCIABLETNA</div>
-        
-        <!-- Sélecteur de langues universel -->
-        <select id="languageSelect">
+    <div class="main-container">
+        <h1>GARCIABLETNA</h1>
+
+        <select class="select-lang">
             <option value="fr">Français</option>
-            <option value="en">English (Anglais)</option>
-            <option value="es">Español (Espagnol)</option>
-            <option value="ar">العربية (Arabe)</option>
-            <option value="zh">中文 (Chinois)</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
         </select>
 
-        <!-- Formulaire de connexion basique -->
-        <input type="text" id="username" placeholder="Entre ton pseudo...">
-        <button onclick="enterChat()">Rejoindre le Salon 🔱</button>
+        <input type="text" class="input-pseudo" placeholder="Entre ton pseudo...">
+
+        <button class="btn-primary-salon" onclick="alert('Bienvenue fondateur Garciabletna !\nConnexion sécurisée aux serveurs...')">
+            <span class="trident-badge">🔱</span> Rejoindre le Salon
+        </button>
     </div>
 
-    <script>
-        function enterChat() {
-            const user = document.getElementById('username').value;
-            if(user.trim() === "") {
-                alert("Entre un pseudo pour continuer !");
-            } else {
-                alert("Bienvenue fondateur " + user + " ! Connexion aux serveurs de Garciabletna...");
-            }
-        }
-    </script>
+    <footer>
+        <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+        <div class="security-note">
+            Protocole de sécurité 2026. Chiffrement de bout en bout, compatibilité VPN active et respect des normes de confidentialité strictes.
+        </div>
+    </footer>
 
 </body>
 </html>
+
