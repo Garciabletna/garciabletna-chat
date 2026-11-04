@@ -9,12 +9,12 @@
         body { background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .app-container { width: 100%; max-width: 414px; height: 100vh; max-height: 896px; background: #000; display: flex; flex-direction: column; position: relative; overflow: hidden; border: 1px solid #222; }
         
-        /* Gestion des Vues de l'Application */
+        /* Gestion des Vues (Empêche la superposition) */
         .view { flex: 1; overflow-y: auto; display: none; padding-bottom: 75px; }
         .view.active { display: flex; flex-direction: column; }
 
-        /* 1. Écran de Connexion (Conforme à l'image 1) */
-        #login-view { justify-content: center; align-items: center; padding: 30px; text-align: center; display: flex; }
+        /* 1. Écran de Connexion (Conforme à tes captures) */
+        #login-view { justify-content: center; align-items: center; padding: 30px; text-align: center; }
         .logo-login { font-size: 32px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 15px rgba(0,255,102,0.6); margin-bottom: 30px; }
         .select-lang { width: 100%; background: #121212; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 15px; font-size: 16px; outline: none; }
         .input-box { width: 100%; background: #121212; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 15px; font-size: 16px; outline: none; }
@@ -23,7 +23,7 @@
         .btn-salon:active { transform: scale(0.98); }
         .security-footer { font-size: 10px; color: #666; text-align: center; margin-top: 40px; line-height: 1.5; }
 
-        /* 2. Profil (Conforme aux images 2 & 3) */
+        /* 2. Profil (Conforme aux images 2, 3 et 4) */
         header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
         .logo-header { font-size: 22px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 8px rgba(0,255,102,0.4); }
         .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; }
@@ -40,20 +40,20 @@
         .btn-action { flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; }
         .btn-action:hover { border-color: #00ff66; }
         
-        /* Grille des posts dynamique avec le bouton + (Remplacement des Post 1, 2, 3 statiques) */
+        /* Grille des posts dynamique avec le bouton + (Fin des Post 1, 2, 3 statiques) */
         .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .post-box { aspect-ratio: 1; background: #121212; display: flex; align-items: center; justify-content: center; color: #00ff66; font-size: 12px; border: 1px dashed #333; text-align: center; padding: 5px; word-break: break-all; }
         .add-post-btn { background: #0a0a0a; color: #00ff66; font-size: 32px; cursor: pointer; border: 1px dashed #00ff66; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 4px; transition: 0.2s; }
         .add-post-btn:hover { background: rgba(0,255,102,0.1); }
 
-        /* 3. Chat Intelligent et Algorithme Serveur Local */
+        /* 3. Chat intelligent et vérifié par serveur local */
         .chat-area { padding: 15px; flex: 1; display: flex; flex-direction: column; }
         .chat-box { flex: 1; background: #080808; border-radius: 10px; padding: 15px; border: 1px solid #1a1a1a; margin-bottom: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .message { padding: 10px 14px; border-radius: 10px; max-width: 80%; font-size: 14px; word-break: break-word; }
         .message.sent { background: #00ff66; color: #000; align-self: flex-end; font-weight: 500; }
         .message.received { background: #1a1a1a; color: #fff; align-self: flex-start; border: 1px solid #333; }
 
-        /* 4. Appels Modernes (Interface d'appel et statut) */
+        /* 4. Appels Modernes */
         .call-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
         .call-avatar { width: 110px; height: 110px; border-radius: 50%; background: #1a1a1a; border: 2px solid #00ff66; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 20px; color: #00ff66; box-shadow: 0 0 20px rgba(0,255,102,0.3); }
         .call-buttons { display: flex; gap: 30px; margin-top: 30px; }
@@ -73,8 +73,8 @@
 
 <div class="app-container">
     
-    <!-- VUE 1 : CONNEXION (Image 1) -->
-    <div id="login-view" class="view active">
+    <!-- VUE 1 : CONNEXION (S'affiche par défaut si pas connecté) -->
+    <div id="login-view" class="view">
         <div class="logo-login">garcia bletna</div>
         <select class="select-lang" id="lang-select">
             <option value="fr">Français</option>
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- VUE 2 : ACCUEIL / PROFIL (Images 2 & 3) -->
+    <!-- VUE 2 : ACCUEIL / PROFIL -->
     <div id="home-view" class="view">
         <header>
             <div class="logo-header" id="header-pseudo">garciabletna</div>
@@ -136,216 +136,5 @@
         </div>
     </div>
 
-    <!-- VUE 3 : DISCUSSION / CHAT AVEC ALGORITHME DE COMPTE -->
-    <div id="chat-view" class="view">
-        <header><div class="logo-header">Discussion</div></header>
-        <div class="chat-area">
-            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                <input type="text" id="target-user" class="input-box" placeholder="Entrer un pseudo valide..." style="margin-bottom:0;">
-                <button class="btn-salon" style="width: 100px; padding: 10px;" onclick="verifyAndOpenChat()">Chercher</button>
-            </div>
-            <div class="chat-box" id="chat-box">
-                <div style="color: #666; text-align: center; margin-top: 20px;" id="chat-info">Recherchez un compte enregistré sur le réseau pour chatter.</div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="message-input" class="input-box" placeholder="Écrire un message..." style="margin-bottom:0;" disabled>
-                <button class="btn-salon" id="send-btn" style="width: 80px; padding: 10px;" onclick="sendMessage()" disabled>Envoyer</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- VUE 4 : APPEL MODERNE -->
-    <div id="call-view" class="view">
-        <header><div class="logo-header">Appel</div></header>
-        <div class="call-container">
-            <div class="call-avatar">📞</div>
-            <h2 id="call-title">Salon d'Appel Sécurisé</h2>
-            <div style="color: #888; font-size: 14px; margin-top: 10px;" id="call-status">Prêt à appeler ou recevoir</div>
-            <div class="call-buttons">
-                <button class="call-btn accept" onclick="startCall()">📞</button>
-                <button class="call-btn hangup" onclick="endCall()">❌</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- VUE 5 : RÉGLAGES -->
-    <div id="settings-view" class="view">
-        <header><div class="logo-header">Réglages</div></header>
-        <div style="padding: 20px; color: #aaa; line-height: 2;">
-            <p><strong>Utilisateur :</strong> <span id="set-user" style="color:#00ff66;">-</span></p>
-            <p><strong>Serveur :</strong> Connecté (garciabletna.github.io)</p>
-            <p><strong>Chiffrement :</strong> Bout en bout 2026</p>
-            <br>
-            <button class="btn-salon" onclick="logout()" style="background:#ff3b30; color:#fff;">Se déconnecter</button>
-        </div>
-    </div>
-
-    <!-- BARRE DE NAVIGATION INFÉRIEURE AVEC ICÔNES NÉON VERT -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('home-view', this)">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            Accueil
-        </button>
-        <button class="nav-item" onclick="switchTab('chat-view', this)">
-            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2z"/></svg>
-            Discussion
-        </button>
-        <button class="nav-item" onclick="switchTab('call-view', this)">
-            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            Appel
-        </button>
-        <button class="nav-item" onclick="switchTab('settings-view', this)">
-            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-            Réglages
-        </button>
-    </nav>
-
-</div>
-
-<script>
-    // Base de données locale synchronisée (serveur local de l'application)
-    let registeredUsers = JSON.parse(localStorage.getItem('gb_users')) || ["garciabletna", "admin", "berrussama"];
-    let currentUser = localStorage.getItem('gb_current_user') || null;
-    let userPosts = JSON.parse(localStorage.getItem('gb_posts')) || [];
-    let isFollowing = false;
-
-    window.onload = function() {
-        if (currentUser) {
-            startAppSession(currentUser);
-        }
-    };
-
-    function registerUser() {
-        let pseudo = document.getElementById('pseudo-input').value.trim().toLowerCase();
-        if (!pseudo) {
-            alert("Veuillez entrer un pseudo valide.");
-            return;
-        }
-        if (!registeredUsers.includes(pseudo)) {
-            registeredUsers.push(pseudo);
-            localStorage.setItem('gb_users', JSON.stringify(registeredUsers));
-        }
-        currentUser = pseudo;
-        localStorage.setItem('gb_current_user', currentUser);
-        startAppSession(currentUser);
-    }
-
-    function startAppSession(username) {
-        document.getElementById('login-view').classList.remove('active');
-        document.getElementById('home-view').classList.add('active');
-        document.getElementById('header-pseudo').innerText = username;
-        document.getElementById('profile-pseudo-title').innerText = username;
-        document.getElementById('set-user').innerText = username;
-        renderPosts();
-    }
-
-    function switchTab(viewId, btnEl) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btnEl.classList.add('active');
-    }
-
-    // Gestion de la grille des posts et du bouton +
-    function createNewPost() {
-        let content = prompt("Entrez le contenu de votre nouvelle publication (texte ou lien) :");
-        if (content) {
-            userPosts.push(content);
-            localStorage.setItem('gb_posts', JSON.stringify(userPosts));
-            renderPosts();
-        }
-    }
-
-    function renderPosts() {
-        let container = document.getElementById('posts-grid-container');
-        let html = `<div class="add-post-btn" onclick="createNewPost()">+</div>`;
-        userPosts.forEach((post, i) => {
-            html += `<div class="post-box">Post ${i+1}<br>${post}</div>`;
-        });
-        container.innerHTML = html;
-        document.getElementById('stat-posts').innerText = userPosts.length;
-    }
-
-    // Story dynamique
-    function addStory() {
-        let story = prompt("Entrez le lien de votre story :");
-        if (story) alert("Story publiée avec succès !");
-    }
-
-    // Algorithme de vérification du compte dans le Chat
-    function verifyAndOpenChat() {
-        let target = document.getElementById('target-user').value.trim().toLowerCase();
-        let box = document.getElementById('chat-box');
-        let input = document.getElementById('message-input');
-        let btn = document.getElementById('send-btn');
-        let info = document.getElementById('chat-info');
-
-        if (!target) return;
-
-        if (registeredUsers.includes(target)) {
-            if (info) info.style.display = 'none';
-            box.innerHTML = `<div style="color: #00ff66; text-align: center; font-size: 11px;">Canal sécurisé ouvert avec @${target}</div>`;
-            input.disabled = false;
-            btn.disabled = false;
-        } else {
-            box.innerHTML = `<div style="color: #ff3b30; text-align: center;">Erreur : Le compte "@${target}" n'existe pas dans le réseau garciabletna.</div>`;
-            input.disabled = true;
-            btn.disabled = true;
-        }
-    }
-
-    function sendMessage() {
-        let input = document.getElementById('message-input');
-        let box = document.getElementById('chat-box');
-        if (!input.value.trim()) return;
-
-        let msg = document.createElement('div');
-        msg.className = 'message sent';
-        msg.innerText = input.value;
-        box.appendChild(msg);
-        input.value = '';
-        box.scrollTop = box.scrollHeight;
-
-        // Réponse automatique intelligente du réseau
-        setTimeout(() => {
-            let reply = document.createElement('div');
-            reply.className = 'message received';
-            reply.innerText = "Message reçu et chiffré sur le serveur garciabletna. 🟢";
-            box.appendChild(reply);
-            box.scrollTop = box.scrollHeight;
-        }, 1000);
-    }
-
-    // Gestion des appels
-    function startCall() {
-        document.getElementById('call-status').innerText = "Appel en cours... Signal sécurisé 🟢";
-    }
-    function endCall() {
-        document.getElementById('call-status').innerText = "Appel terminé.";
-    }
-
-    function toggleFollow() {
-        let btn = document.getElementById('follow-btn');
-        isFollowing = !isFollowing;
-        btn.innerText = isFollowing ? "Abonné(e)" : "S'abonner";
-        btn.style.color = isFollowing ? "#00ff66" : "#fff";
-        btn.style.background = isFollowing ? "#222" : "#1a1a1a";
-    }
-
-    function editProfileName() {
-        let newName = prompt("Nouveau pseudo :");
-        if (newName) {
-            currentUser = newName.trim().toLowerCase();
-            localStorage.setItem('gb_current_user', currentUser);
-            startAppSession(currentUser);
-        }
-    }
-
-    function logout() {
-        localStorage.removeItem('gb_current_user');
-        location.reload();
-    }
-</script>
-
-</body>
-</html>
+    <!-- VUE 3 : DISCUSSION / CHAT -->
+    
