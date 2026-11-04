@@ -12,9 +12,13 @@
         .view { flex: 1; overflow-y: auto; display: none; padding-bottom: 75px; flex-direction: column; }
         .view.active { display: flex; }
 
+        /* Gestion de l'affichage de la barre de navigation (masquée sur le login) */
+        .bottom-nav { display: none; }
+        .app-container.in-app .bottom-nav { display: flex; }
+
         /* Écran de Connexion */
         #login-view { justify-content: center; align-items: center; padding: 30px; text-align: center; }
-        .logo-login { font-size: 32px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 15px rgba(0,255,102,0.6); margin-bottom: 10px; }
+        .logo-login { font-size: 32px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 15px rgba(0,255,102,0.6); margin-bottom: 10px; font-family: serif; }
         .auth-subtitle { color: #00ff66; font-size: 14px; font-weight: bold; margin-bottom: 30px; letter-spacing: 1px; }
         .input-box { width: 100%; background: #121212; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 15px; font-size: 16px; outline: none; }
         .input-box:focus { border-color: #00ff66; box-shadow: 0 0 8px rgba(0,255,102,0.4); }
@@ -31,10 +35,13 @@
 
         /* Entêtes et Profil */
         header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; background: #000; }
-        .logo-header { font-size: 22px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 8px rgba(0,255,102,0.4); }
+        .logo-header { font-size: 22px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 8px rgba(0,255,102,0.4); font-family: serif; }
         .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; }
+        
         .avatar-container { position: relative; width: 85px; height: 85px; border-radius: 50%; background: linear-gradient(45deg, #00ff66, #00ffff); padding: 3px; cursor: pointer; box-shadow: 0 0 10px rgba(0,255,102,0.3); }
         .avatar { width: 100%; height: 100%; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 32px; }
+        .story-plus-badge { position: absolute; bottom: 0; right: 0; width: 24px; height: 24px; background: #00ff66; color: #000; border-radius: 50%; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; border: 2px solid #000; }
+
         .profile-info { flex: 1; }
         .username-row { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #fff; }
         
@@ -46,18 +53,27 @@
         .btn-action { flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; transition: 0.2s; }
         .btn-action:hover { border-color: #00ff66; }
         
-        /* Grille des posts dynamique avec le bouton + */
+        /* Grille des posts */
         .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
         .post-box { aspect-ratio: 1; background: #121212; display: flex; align-items: center; justify-content: center; color: #00ff66; font-size: 12px; border: 1px dashed #333; text-align: center; padding: 5px; word-break: break-all; }
-        .add-post-btn { background: #0a0a0a; color: #00ff66; font-size: 32px; cursor: pointer; border: 1px dashed #00ff66; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 4px; transition: 0.2s; }
-        .add-post-btn:hover { background: rgba(0,255,102,0.1); }
 
-        /* Interface Chat */
-        .chat-area { padding: 15px; flex: 1; display: flex; flex-direction: column; }
-        .chat-box { flex: 1; background: #080808; border-radius: 10px; padding: 15px; border: 1px solid #1a1a1a; margin-bottom: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        /* Interface Discussion style Instagram / WhatsApp */
+        .chat-list-container { padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .chat-item:hover { border-color: #00ff66; }
+        .chat-item-avatar { width: 50px; height: 50px; border-radius: 50%; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid #00ff66; }
+        .chat-item-info { flex: 1; }
+        .chat-item-name { font-weight: bold; font-size: 15px; color: #fff; margin-bottom: 3px; }
+        .chat-item-preview { font-size: 12px; color: #888; }
+
+        /* Vue conversation active */
+        #active-chat-view { display: none; flex-direction: column; height: 100%; }
+        #active-chat-view.active { display: flex; }
+        .chat-conversation-area { flex: 1; background: #050505; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .message { padding: 10px 14px; border-radius: 10px; max-width: 80%; font-size: 14px; word-break: break-word; }
         .message.sent { background: #00ff66; color: #000; align-self: flex-end; font-weight: 500; }
         .message.received { background: #1a1a1a; color: #fff; align-self: flex-start; border: 1px solid #333; }
+        .chat-bottom-bar { padding: 12px 15px; background: #000; border-top: 1px solid #1a1a1a; display: flex; gap: 8px; align-items: center; }
 
         /* Interface Appels */
         .call-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
@@ -67,21 +83,23 @@
         .call-btn.accept { background: #00ff66; color: #000; box-shadow: 0 0 10px rgba(0,255,102,0.5); }
         .call-btn.hangup { background: #ff3b30; color: #fff; box-shadow: 0 0 10px rgba(255,59,48,0.5); }
 
-        /* Barre de navigation inférieure Néon Vert */
+        /* Barre de navigation inférieure Néon Vert avec le bouton + au centre */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 65px; background: #000; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
         .nav-item { background: none; border: none; color: #666; font-size: 11px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: 0.2s; }
         .nav-item.active { color: #00ff66; text-shadow: 0 0 8px rgba(0,255,102,0.6); }
         .nav-item.active svg { filter: drop-shadow(0 0 6px #00ff66); }
         .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
+        .nav-center-btn { width: 42px; height: 42px; background: #00ff66; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(0,255,102,0.5); border: none; transition: 0.2s; }
+        .nav-center-btn:active { transform: scale(0.92); }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     
-    <!-- 1. AUTHENTIFICATION (Actif par défaut) -->
+    <!-- 1. AUTHENTIFICATION -->
     <div id="login-view" class="view active">
-        <div class="logo-login">garcia bletna</div>
+        <div class="logo-login">garciabletna</div>
         <div class="auth-subtitle">AUTHENTIFICATION DU RÉSEAU</div>
         
         <input type="text" id="name-input" class="input-box" placeholder="Nom (minuscules sans espaces)...">
@@ -112,17 +130,18 @@
     <!-- 3. ACCUEIL / PROFIL INTELLIGENT -->
     <div id="home-view" class="view">
         <header>
-            <div class="logo-header" id="header-pseudo">bletigram</div>
-            <span style="font-size: 22px; cursor: pointer;" onclick="alert('Aucune nouvelle notification.')">❤️</span>
+            <div class="logo-header" id="header-pseudo">garciabletna</div>
+            <span style="font-size: 20px; cursor: pointer; color: #00ff66; text-shadow: 0 0 8px rgba(0,255,102,0.5);" onclick="alert('Notifications de sécurité 2026 : Aucune alerte.')" title="Notifications">🔱</span>
         </header>
 
         <div class="profile-header">
-            <div class="avatar-container" onclick="addStory()">
+            <div class="avatar-container" onclick="triggerGalleryStory()">
                 <div class="avatar">👤</div>
+                <div class="story-plus-badge">+</div>
             </div>
             <div class="profile-info">
                 <div class="username-row">
-                    <span id="profile-pseudo-title">bletigram</span>
+                    <span id="profile-pseudo-title">garciabletna</span>
                     <span style="font-size: 14px; color: #00ff66;">⚡</span>
                 </div>
                 <div style="font-size: 11px; color: #888;">Appuyez sur la photo pour la story</div>
@@ -149,26 +168,37 @@
             <button class="btn-action" id="follow-btn" onclick="toggleFollow()">S'abonner</button>
         </div>
 
-        <!-- Grille dynamique des publications avec le bouton + -->
-        <div class="posts-grid" id="posts-grid-container">
-            <div class="add-post-btn" onclick="createNewPost()">+</div>
-        </div>
+        <!-- Grille des publications -->
+        <div class="posts-grid" id="posts-grid-container"></div>
     </div>
 
-    <!-- 4. DISCUSSION / CHAT INTELLIGENT -->
+    <!-- 4. DISCUSSION / MESSAGERIE STYLE INSTAGRAM / WHATSAPP -->
     <div id="chat-view" class="view">
-        <header><div class="logo-header">Discussion</div></header>
-        <div class="chat-area">
-            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                <input type="text" id="target-user" class="input-box" placeholder="Entrer un nom valide..." style="margin-bottom:0;">
-                <button class="btn-salon" style="width: 100px; padding: 10px;" onclick="verifyAndOpenChat()">Chercher</button>
+        <header>
+            <div class="logo-header">Discussion</div>
+            <button class="btn-salon" style="width: auto; padding: 6px 12px; font-size: 13px;" onclick="openNewChatPrompt()">+ Nouveau chat</button>
+        </header>
+        
+        <!-- Liste des conversations -->
+        <div class="chat-list-container" id="chat-list">
+            <!-- Les discussions s'afficheront dynamiquement ici -->
+        </div>
+
+        <!-- Sous-vue : Fenêtre de chat active (cachée par défaut, s'ouvre au clic sur un contact) -->
+        <div id="active-chat-view">
+            <header style="background: #080808;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button onclick="backToChatList()" style="background:none; border:none; color:#00ff66; font-size:18px; cursor:pointer;">←</button>
+                    <div style="font-weight: bold; color: #00ff66;" id="active-chat-title">@contact</div>
+                </div>
+                <span style="font-size: 12px; color: #888;">Sécurisé 🟢</span>
+            </header>
+            <div class="chat-conversation-area" id="active-chat-messages">
+                <!-- Messages de la conversation -->
             </div>
-            <div class="chat-box" id="chat-box">
-                <div style="color: #666; text-align: center; margin-top: 20px;" id="chat-info">Recherchez un compte enregistré pour lancer une discussion sécurisée.</div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="message-input" class="input-box" placeholder="Écrire un message..." style="margin-bottom:0;" disabled>
-                <button class="btn-salon" id="send-btn" style="width: 80px; padding: 10px;" onclick="sendMessage()" disabled>Envoyer</button>
+            <div class="chat-bottom-bar">
+                <input type="text" id="active-msg-input" class="input-box" placeholder="Écrire un message..." style="margin-bottom:0;">
+                <button class="btn-salon" style="width: 80px; padding: 10px;" onclick="sendActiveMessage()">Envoyer</button>
             </div>
         </div>
     </div>
@@ -187,6 +217,9 @@
         </div>
     </div>
 
+    <!-- INPUT MASQUÉ POUR SYNCHRONISER LA GALERIE (STORY) -->
+    <input type="file" id="gallery-input" accept="image/*,video/*" style="display: none;" onchange="handleGalleryUpload(event)">
+
     <!-- BARRE DE NAVIGATION INFÉRIEURE -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('home-view', this)">
@@ -197,6 +230,7 @@
             <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0-2-.9-2-2V4c0-1.1-.9-2-2-2z"/></svg>
             Discussion
         </button>
+        <button class="nav-center-btn" onclick="createNewPost()" title="Créer une publication">+</button>
         <button class="nav-item" onclick="switchTab('call-view', this)">
             <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
             Appel
@@ -209,6 +243,7 @@
     let registeredUsers = JSON.parse(localStorage.getItem('gb_users')) || ["garciabletna", "admin", "berrussama"];
     let currentUser = localStorage.getItem('gb_current_user') || null;
     let userPosts = JSON.parse(localStorage.getItem('gb_posts')) || [];
+    let activeChatUser = null;
     let isFollowing = false;
 
     function handleAuth() {
@@ -235,6 +270,7 @@
     function enterMainApp() {
         document.getElementById('welcome-view').classList.remove('active');
         document.getElementById('home-view').classList.add('active');
+        document.querySelector('.app-container').classList.add('in-app');
         
         document.getElementById('header-pseudo').innerText = currentUser;
         document.getElementById('profile-pseudo-title').innerText = currentUser;
@@ -243,17 +279,30 @@
         if (currentUser === "garciabletna" || currentUser === "garcia bletna") {
             followersEl.innerText = "X";
         } else {
-            followersEl.innerText = "0";
+            let dynamicFollowers = localStorage.getItem('gb_followers_' + currentUser) || "0";
+            followersEl.innerText = dynamicFollowers;
         }
         
         renderPosts();
+        renderChatList();
     }
 
     function switchTab(viewId, btnEl) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        btnEl.classList.add('active');
+        if(btnEl) btnEl.classList.add('active');
+    }
+
+    function triggerGalleryStory() {
+        document.getElementById('gallery-input').click();
+    }
+
+    function handleGalleryUpload(event) {
+        let file = event.target.files[0];
+        if (file) {
+            alert("Média sélectionné depuis la galerie : " + file.name + "\nStory publiée avec succès sur Bletigram ! 🟢");
+        }
     }
 
     function createNewPost() {
@@ -267,7 +316,7 @@
 
     function renderPosts() {
         let container = document.getElementById('posts-grid-container');
-        let html = `<div class="add-post-btn" onclick="createNewPost()">+</div>`;
+        let html = '';
         userPosts.forEach((post, i) => {
             html += `<div class="post-box">Post ${i+1}<br>${post}</div>`;
         });
@@ -275,63 +324,116 @@
         document.getElementById('stat-posts').innerText = userPosts.length;
     }
 
-    function addStory() {
-        let story = prompt("Lien ou texte de votre story :");
-        if (story) alert("Story publiée avec succès !");
-    }
-
-    function verifyAndOpenChat() {
-        let target = document.getElementById('target-user').value.trim().toLowerCase();
-        let box = document.getElementById('chat-box');
-        let input = document.getElementById('message-input');
-        let btn = document.getElementById('send-btn');
-        let info = document.getElementById('chat-info');
-
-        if (!target) return;
-
-        if (registeredUsers.includes(target)) {
-            if (info) info.style.display = 'none';
-            box.innerHTML = `<div style="color: #00ff66; text-align: center; font-size: 11px;">Canal sécurisé ouvert avec @${target}</div>`;
-            input.disabled = false;
-            btn.disabled = false;
-        } else {
-            box.innerHTML = `<div style="color: #ff3b30; text-align: center;">Erreur : Le compte "@${target}" n'existe pas sur Bletigram.</div>`;
-            input.disabled = true;
-            btn.disabled = true;
-        }
-    }
-
-    function sendMessage() {
-        let input = document.getElementById('message-input');
-        let box = document.getElementById('chat-box');
-        if (!input.value.trim()) return;
-
-        let msg = document.createElement('div');
-        msg.className = 'message sent';
-        msg.innerText = input.value;
-        box.appendChild(msg);
-        input.value = '';
-        box.scrollTop = box.scrollHeight;
-
-        setTimeout(() => {
-            let reply = document.createElement('div');
-            reply.className = 'message received';
-            reply.innerText = "Message reçu et chiffré sur le serveur Bletigram. 🟢";
-            box.appendChild(reply);
-            box.scrollTop = box.scrollHeight;
-        }, 1000);
-    }
-
     function toggleFollow() {
         let btn = document.getElementById('follow-btn');
         let followingEl = document.getElementById('stat-following');
+        let currentFollowing = parseInt(followingEl.innerText) || 0;
+        
         isFollowing = !isFollowing;
         
-        btn.innerText = isFollowing ? "Abonné(e)" : "S'abonner";
-        btn.style.color = isFollowing ? "#00ff66" : "#fff";
-        btn.style.background = isFollowing ? "#222" : "#1a1a1a";
+        if (isFollowing) {
+            btn.innerText = "Abonné(e)";
+            btn.style.color = "#00ff66";
+            btn.style.background = "#222";
+            followingEl.innerText = currentFollowing + 1;
+        } else {
+            btn.innerText = "S'abonner";
+            btn.style.color = "#fff";
+            btn.style.background = "#1a1a1a";
+            followingEl.innerText = Math.max(0, currentFollowing - 1);
+        }
+    }
+
+    /* Gestionnaire de la liste des messages style Instagram/WhatsApp */
+    function renderChatList() {
+        let listContainer = document.getElementById('chat-list');
+        // On récupère les utilisateurs enregistrés sauf soi-même
+        let otherUsers = registeredUsers.filter(u => u !== currentUser);
         
-        followingEl.innerText = isFollowing ? "1" : "0";
+        if (otherUsers.length === 0) {
+            listContainer.innerHTML = `<div style="color: #666; text-align: center; margin-top: 30px;">Aucune conversation pour le moment.</div>`;
+            return;
+        }
+
+        let html = '';
+        otherUsers.forEach(user => {
+            html += `
+                <div class="chat-item" onclick="openChatWith('${user}')">
+                    <div class="chat-item-avatar">👤</div>
+                    <div class="chat-item-info">
+                        <div class="chat-item-name">@${user}</div>
+                        <div class="chat-item-preview">Canal chiffré sécurisé 🟢</div>
+                    </div>
+                </div>
+            `;
+        });
+        listContainer.innerHTML = html;
+    }
+
+    function openNewChatPrompt() {
+        let target = prompt("Entrez le nom du compte à contacter :");
+        if (!target) return;
+        let cleanTarget = target.toLowerCase().replace(/\s+/g, '');
+        
+        if (registeredUsers.includes(cleanTarget)) {
+            if (cleanTarget === currentUser) {
+                alert("Vous ne pouvez pas vous envoyer un message à vous-même.");
+                return;
+            }
+            openChatWith(cleanTarget);
+        } else {
+            alert("Erreur : Ce compte n'existe pas sur Bletigram.");
+        }
+    }
+
+    function openChatWith(username) {
+        activeChatUser = username;
+        document.getElementById('active-chat-title').innerText = "@" + username;
+        document.getElementById('chat-list').style.display = 'none';
+        let activeView = document.getElementById('active-chat-view');
+        activeView.style.display = 'flex';
+        activeView.classList.add('active');
+
+        // Charger l'historique des messages pour ce contact
+        let chatKey = 'gb_chat_' + currentUser + '_' + username;
+        let messages = JSON.parse(localStorage.getItem(chatKey)) || [];
+        let msgBox = document.getElementById('active-chat-messages');
+        
+        let html = `<div style="color: #00ff66; text-align: center; font-size: 11px; margin-bottom: 10px;">Discussion sécurisée et chiffrée avec @${username}</div>`;
+        messages.forEach(m => {
+            html += `<div class="message ${m.sender === currentUser ? 'sent' : 'received'}">${m.text}</div>`;
+        });
+        msgBox.innerHTML = html;
+        msgBox.scrollTop = msgBox.scrollHeight;
+    }
+
+    function backToChatList() {
+        let activeView = document.getElementById('active-chat-view');
+        activeView.style.display = 'none';
+        activeView.classList.remove('active');
+        document.getElementById('chat-list').style.display = 'flex';
+    }
+
+    function sendActiveMessage() {
+        let input = document.getElementById('active-msg-input');
+        let text = input.value.trim();
+        if (!text || !activeChatUser) return;
+
+        let chatKey = 'gb_chat_' + currentUser + '_' + activeChatUser;
+        let messages = JSON.parse(localStorage.getItem(chatKey)) || [];
+        
+        messages.push({ sender: currentUser, text: text });
+        localStorage.setItem(chatKey, JSON.stringify(messages));
+
+        openChatWith(activeChatUser);
+        input.value = '';
+
+        // Simulation de réponse automatique après 1 seconde
+        setTimeout(() => {
+            messages.push({ sender: activeChatUser, text: "Message reçu et chiffré sur Bletigram. 🟢" });
+            localStorage.setItem(chatKey, JSON.stringify(messages));
+            if (activeChatUser === activeChatUser) openChatWith(activeChatUser);
+        }, 1000);
     }
 
     function startCall() { document.getElementById('call-status').innerText = "Appel en cours... Signal sécurisé 🟢"; }
