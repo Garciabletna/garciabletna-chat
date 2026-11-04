@@ -3,705 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garcia Bletna - Application Sociale</title>
+    <title>Garcia Bletna Chat</title>
     <style>
         :root {
-            --primary-bg: #000000;
+            --bg-color: #000000;
             --card-bg: #121212;
+            --accent-green: #00ff66;
             --text-color: #ffffff;
-            --text-secondary: #8e8e8e;
-            --neon-green: #00ff66;
-            --dark-green-nav: #051a0b;
-            --border-color: #262626;
+            --text-gray: #888888;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-
         body {
-            background-color: var(--primary-bg);
+            background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             min-height: 100vh;
+            padding-bottom: 70px;
         }
-
-        .app-container {
-            width: 100%;
-            max-width: 430px;
-            height: 100vh;
-            max-height: 932px;
-            background-color: var(--primary-bg);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        /* --- ÉCRAN DE DÉMARRAGE --- */
-        #splash-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
-        }
-
-        .splash-logo {
-            font-size: 4rem;
-            font-weight: bold;
-            color: var(--text-color);
-            text-shadow: 0 0 15px var(--neon-green);
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .splash-footer {
-            position: absolute;
-            bottom: 40px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* --- AUTHENTIFICATION --- */
-        #auth-screen {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            padding: 30px;
-            height: 100%;
-            text-align: center;
-        }
-
-        #auth-screen h1 {
-            font-family: 'Brush Script MT', cursive, sans-serif;
-            font-size: 3rem;
-            color: var(--neon-green);
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
-        }
-
-        .auth-input {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 15px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-color);
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--neon-green);
-            color: #000;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
-        }
-
-        /* --- INTERFACE PRINCIPALE --- */
-        #main-app {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-        }
-
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
-            background: #000;
+            font-size: 22px;
+            font-weight: bold;
+            font-style: italic;
+            color: var(--accent-green);
+            border-bottom: 1px solid #222;
         }
-
-        .app-title {
-            font-family: 'Brush Script MT', cursive, sans-serif;
-            font-size: 1.8rem;
-            color: var(--neon-green);
-            text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .header-icons svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-            cursor: pointer;
-        }
-
-        /* Pages du corps */
-        .page-content {
-            flex: 1;
-            overflow-y: auto;
-            display: none;
-            padding: 15px;
-        }
-
-        .page-content.active {
-            display: block;
-        }
-
-        /* PROFIL STYLE INSTAGRAM */
-        .profile-header {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 5px;
         }
-
-        .avatar-container {
+        .header-right {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .profile-container {
+            padding: 20px;
+            text-align: center;
+        }
+        .profile-pic-wrapper {
             position: relative;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 10px auto;
             border-radius: 50%;
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
             overflow: hidden;
-            border: 2px solid var(--neon-green);
-            box-shadow: 0 0 10px var(--neon-green);
-            flex-shrink: 0;
         }
-
-        .avatar-container img {
+        .profile-pic-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
-        .avatar-container input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 5px;
-        }
-
-        .profile-name {
-            font-size: 1.2rem;
+        .username-row {
+            font-size: 20px;
             font-weight: bold;
-        }
-
-        .trident-badge {
-            width: 18px;
-            height: 18px;
-            fill: var(--neon-green);
-            filter: drop-shadow(0 0 6px var(--neon-green));
-        }
-
-        .edit-name-input {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            display: none;
-            width: 100%;
             margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
         }
-
-        .stats-row {
+        .bio-hint {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+        .stats-box {
             display: flex;
             justify-content: space-around;
-            text-align: center;
-            background: var(--card-bg);
-            padding: 12px;
+            background-color: var(--card-bg);
+            border: 1px solid #222;
             border-radius: 10px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
-
-        .stat-item .number {
+        .stat-item {
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 18px;
             font-weight: bold;
-            font-size: 1.1rem;
-            color: var(--neon-green);
         }
-
-        .stat-item .label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+        .stat-num.green {
+            color: var(--accent-green);
         }
-
-        .profile-actions {
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: 3px;
+        }
+        .action-buttons {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-
-        .action-btn {
+        .btn {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333;
             background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: white;
-            border-radius: 6px;
+            color: var(--text-color);
+            font-weight: bold;
             cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 14px;
         }
-
-        .action-btn:hover {
-            border-color: var(--neon-green);
-        }
-
-        /* Grille de publications factices */
         .posts-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 3px;
+            gap: 5px;
         }
-
-        .post-thumbnail {
-            aspect-ratio: 1;
+        .post-tile {
             background-color: var(--card-bg);
+            aspect-ratio: 1;
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            border: 1px solid var(--border-color);
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 12px;
+            border: 1px solid #222;
         }
-
-        /* DISCUSSION / CHAT */
-        .chat-list {
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-gray);
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: var(--accent-green);
+        }
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        /* Section views */
+        .view-section {
+            display: none;
+            padding: 20px;
+        }
+        .view-section.active {
+            display: block;
+        }
+        /* Add contact & chat styles */
+        .add-contact-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .add-contact-box input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: var(--card-bg);
+            color: white;
+        }
+        .contact-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
-        .chat-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
+        .contact-card {
             background: var(--card-bg);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-        }
-
-        .chat-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--neon-green);
-            color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .chat-details h4 {
-            font-size: 0.95rem;
-            margin-bottom: 3px;
-        }
-
-        .chat-details p {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* APPELS */
-        .call-item {
+            padding: 12px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 8px;
-        }
-
-        .call-info h4 {
-            font-size: 0.95rem;
-        }
-
-        .call-info p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* PARAMÈTRES / CONFIG */
-        .settings-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 15px;
-        }
-
-        .settings-card h3 {
-            color: var(--neon-green);
-            margin-bottom: 10px;
-            font-size: 1rem;
-        }
-
-        .danger-btn {
-            background: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
+            border: 1px solid #222;
             cursor: pointer;
-        }
-
-        /* BARRE DE NAVIGATION INFÉRIEURE (VERT FONCÉ) */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 60px;
-            background-color: var(--dark-green-nav);
-            border-top: 1px solid #004d1a;
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--neon-green);
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .nav-item.active {
-            opacity: 1;
-            text-shadow: 0 0 8px var(--neon-green);
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--neon-green);
-        }
-
-        .nav-item span {
-            font-size: 0.65rem;
-            margin-top: 3px;
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <!-- 1. ÉCRAN DE DÉMARRAGE -->
-        <div id="splash-screen">
-            <div class="splash-logo">G 🔱 G</div>
-            <div class="splash-footer">Développé par Garcia Bletna</div>
+    <header>
+        <div class="header-left">
+            <span>GG</span> garciabletna
         </div>
+        <div class="header-right" id="top-emoji">🔱</div>
+    </header>
 
-        <!-- 2. ÉCRAN DE CONNEXION -->
-        <div id="auth-screen">
-            <h1>Garcia Bletna</h1>
-            <input type="text" id="username-input" class="auth-input" placeholder="Entrez votre nom d'utilisateur">
-            <button class="auth-btn" onclick="login()">Se connecter / S'inscrire</button>
+    <!-- ACCUEIL / PROFIL -->
+    <div id="section-accueil" class="view-section active">
+        <div class="profile-container">
+            <div class="profile-pic-wrapper">
+                <img src="" id="profile-img" alt="Avatar">
+            </div>
+            <div class="username-row">
+                <span id="display-username">garciabletna</span> ⚡
+            </div>
+            <div class="bio-hint">Appuyez sur la photo pour modifier</div>
+
+            <div class="stats-box">
+                <div class="stat-item">
+                    <div class="stat-num" id="stat-posts">3</div>
+                    <div class="stat-label">publications</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" id="stat-followers">X</div>
+                    <div class="stat-label">abonnés</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num green" id="stat-following">142</div>
+                    <div class="stat-label">suivis</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn" onclick="editProfile()">Modifier profil</button>
+                <button class="btn" onclick="toggleFollow()">S'abonner</button>
+            </div>
+
+            <div class="posts-grid">
+                <div class="post-tile">Post 1</div>
+                <div class="post-tile">Post 2</div>
+                <div class="post-tile">Post 3</div>
+            </div>
         </div>
-
-        <!-- 3. INTERFACE PRINCIPALE -->
-        <div id="main-app">
-            <header>
-                <div class="app-title">garciabletna</div>
-                <div class="header-icons">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                </div>
-            </header>
-
-            <!-- CONTENU DES PAGES -->
-
-            <!-- PAGE 1 : ACCUEIL / PROFIL -->
-            <div id="page-home" class="page-content active">
-                <div class="profile-header">
-                    <div class="avatar-container">
-                        <img id="profile-pic" src="https://via.placeholder.com/150/121212/00ff66?text=GG" alt="Profil">
-                        <input type="file" accept="image/*" onchange="changeProfilePic(event)" title="Changer la photo">
-                    </div>
-                    <div class="profile-info">
-                        <div class="profile-name-row">
-                            <span id="display-name" class="profile-name">Utilisateur</span>
-                            <!-- Trident Lumineux (Certification) -->
-                            <svg class="trident-badge" viewBox="0 0 24 24"><path d="M12 2v6m-4-3l4 3 4-3M12 8v14m-5-4l5 2 5-2"/></svg>
-                        </div>
-                        <input type="text" id="edit-name-input" class="edit-name-input" placeholder="Nouveau nom..." onblur="saveName()">
-                        <p style="font-size: 0.75rem; color: var(--text-secondary);">Appuyez sur la photo pour modifier</p>
-                    </div>
-                </div>
-
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <div class="number">3</div>
-                        <div class="label">publications</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="number" id="followers-count">0</div>
-                        <div class="label">abonnés</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="number">142</div>
-                        <div class="label">suivis</div>
-                    </div>
-                </div>
-
-                <div class="profile-actions">
-                    <button class="action-btn" onclick="toggleEditName()">Modifier profil</button>
-                    <button class="action-btn" onclick="simulateFollow()">S'abonner</button>
-                </div>
-
-                <!-- Grille de publications -->
-                <div class="posts-grid">
-                    <div class="post-thumbnail">Post 1</div>
-                    <div class="post-thumbnail">Post 2</div>
-                    <div class="post-thumbnail">Post 3</div>
-                </div>
-            </div>
-
-            <!-- PAGE 2 : DISCUSSION / CHAT -->
-            <div id="page-chat" class="page-content">
-                <div class="chat-list">
-                    <div class="chat-item">
-                        <div class="chat-avatar">GB</div>
-                        <div class="chat-details">
-                            <h4>Garcia Bletna (Support)</h4>
-                            <p>Bienvenue sur ton application officielle !</p>
-                        </div>
-                    </div>
-                    <div class="chat-item">
-                        <div class="chat-avatar">AI</div>
-                        <div class="chat-details">
-                            <h4>Communauté Elite</h4>
-                            <p>Le réseau est sécurisé en vert néon.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 3 : APPELS -->
-            <div id="page-calls" class="page-content">
-                <div class="call-item">
-                    <div class="call-info">
-                        <h4>Appel audio entrant</h4>
-                        <p>Aujourd'hui, 14:20</p>
-                    </div>
-                    <span style="color: var(--neon-green); font-size: 0.8rem;">Manqué</span>
-                </div>
-                <div class="call-item">
-                    <div class="call-info">
-                        <h4>Appel vidéo sortant</h4>
-                        <p>Hier, 19:45</p>
-                    </div>
-                    <span style="color: var(--text-secondary); font-size: 0.8rem;">Terminé</span>
-                </div>
-            </div>
-
-            <!-- PAGE 4 : PARAMÈTRES -->
-            <div id="page-settings" class="page-content">
-                <div class="settings-card">
-                    <h3>Informations du compte</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 10px;">Application gérée et développée par Garcia Bletna.</p>
-                </div>
-                <button class="danger-btn" onclick="logout()">Se déconnecter</button>
-            </div>
-
-            <!-- BARRE DE NAVIGATION INFÉRIEURE (VERT FONCÉ) -->
-            <nav class="bottom-nav">
-                <button class="nav-item active" onclick="switchTab('home', this)">
-                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                    <span>Accueil</span>
-                </button>
-                <button class="nav-item" onclick="switchTab('chat', this)">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                    <span>Discussion</span>
-                </button>
-                <button class="nav-item" onclick="switchTab('calls', this)">
-                    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                    <span>Appel</span>
-                </button>
-                <button class="nav-item" onclick="switchTab('settings', this)">
-                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                    <span>Réglages</span>
-                </button>
-            </nav>
-        </div>
-
     </div>
 
+    <!-- DISCUSSION -->
+    <div id="section-discussion" class="view-section">
+        <h2>Discussions</h2>
+        <p style="color:var(--text-gray); font-size:13px; margin: 10px 0;">Ajoutez quelqu'un pour discuter directement.</p>
+        <div class="add-contact-box">
+            <input type="text" id="new-contact-name" placeholder="Nom de la personne...">
+            <button class="btn" onclick="addContact()" style="background:var(--accent-green); color:black;">Ajouter</button>
+        </div>
+        <div class="contact-list" id="contact-list">
+            <!-- Les contacts ajoutés apparaîtront ici -->
+        </div>
+    </div>
+
+    <!-- APPEL -->
+    <div id="section-appel" class="view-section">
+        <h2>Historique des appels</h2>
+        <p style="color: var(--text-gray); margin-top: 20px; text-align: center;" id="call-empty-msg">Aucun appel récent.</p>
+        <div id="call-list"></div>
+    </div>
+
+    <!-- REGLAGES -->
+    <div id="section-reglages" class="view-section">
+        <h2>Réglages</h2>
+        <p style="color: var(--text-gray); margin-top: 10px;">Gestion du compte et de l'application.</p>
+        <button class="btn" onclick="resetAccount()" style="margin-top: 20px; border-color: red; color: red;">Réinitialiser le compte</button>
+    </div>
+
+    <!-- BARRE DE NAVIGATION -->
+    <nav>
+        <div class="nav-item active" onclick="switchTab('accueil', this)">
+            <span class="nav-icon">🏠</span>
+            <span>Accueil</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('discussion', this)">
+            <span class="nav-icon">🔱</span>
+            <span>Discussion</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('appel', this)">
+            <span class="nav-icon">📞</span>
+            <span>Appel</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('reglages', this)">
+            <span class="nav-icon">⚙️</span>
+            <span>Réglages</span>
+        </div>
+    </nav>
+
     <script>
-        // Gestion de l'écran de démarrage
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    checkAuth();
-                }, 500);
-            }, 2000);
-        });
+        // Gestion des données utilisateur et de l'algorithme des abonnés
+        let userData = JSON.parse(localStorage.getItem('gb_user')) || {
+            username: "garciabletna",
+            isOwner: true,
+            followers: "X",
+            following: 142,
+            postsCount: 3,
+            contacts: []
+        };
 
-        function checkAuth() {
-            const savedUser = localStorage.getItem('garciabletna_user');
-            if (savedUser) {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-                loadUserData(savedUser);
-            } else {
-                document.getElementById('auth-screen').style.display = 'flex';
-            }
+        // Si ce n'est pas le compte principal, les abonnés commencent à 0
+        if(userData.username !== "garciabletna" && userData.followers === "X") {
+            userData.followers = 0;
         }
 
-        function login() {
-            const usernameInput = document.getElementById('username-input').value.trim();
-            if (!usernameInput) {
-                alert("Veuillez entrer un nom d'utilisateur");
-                return;
-            }
-            localStorage.setItem('garciabletna_user', usernameInput);
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            loadUserData(usernameInput);
-        }
+        document.getElementById('display-username').innerText = userData.username;
+        document.getElementById('stat-followers').innerText = userData.followers;
+        document.getElementById('stat-following').innerText = userData.following;
+        document.getElementById('stat-posts').innerText = userData.postsCount;
 
-        function logout() {
-            localStorage.removeItem('garciabletna_user');
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('auth-screen').style.display = 'flex';
-        }
-
-        function loadUserData(username) {
-            document.getElementById('display-name').innerText = username;
-
-            const followersEl = document.getElementById('followers-count');
-            if (username.toLowerCase() === "garcia bletna" || username.toLowerCase() === "garciabletna") {
-                followersEl.innerText = "X"; // Privilège Fondateur
-            } else {
-                let savedFollowers = localStorage.getItem('followers_' + username);
-                if (!savedFollowers) {
-                    savedFollowers = Math.floor(Math.random() * 30) + 5;
-                    localStorage.setItem('followers_' + username, savedFollowers);
-                }
-                followersEl.innerText = savedFollowers;
-            }
-
-            const savedPic = localStorage.getItem('profile_pic_' + username);
-            if (savedPic) {
-                document.getElementById('profile-pic').src = savedPic;
-            }
-        }
-
-        function changeProfilePic(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Image = e.target.result;
-                    document.getElementById('profile-pic').src = base64Image;
-                    const username = localStorage.getItem('garciabletna_user');
-                    localStorage.setItem('profile_pic_' + username, base64Image);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function toggleEditName() {
-            const nameSpan = document.getElementById('display-name');
-            const nameInput = document.getElementById('edit-name-input');
-            if (nameInput.style.display === 'block') {
-                nameInput.style.display = 'none';
-                nameSpan.style.display = 'block';
-            } else {
-                nameInput.style.display = 'block';
-                nameInput.value = nameSpan.innerText;
-                nameSpan.style.display = 'none';
-                nameInput.focus();
-            }
-        }
-
-        function saveName() {
-            const nameInput = document.getElementById('edit-name-input');
-            const newName = nameInput.value.trim();
-            if (newName) {
-                document.getElementById('display-name').innerText = newName;
-                localStorage.setItem('garciabletna_user', newName);
-            }
-            nameInput.style.display = 'none';
-            document.getElementById('display-name').style.display = 'block';
-        }
-
-        let isFollowing = false;
-        function simulateFollow() {
-            const username = localStorage.getItem('garciabletna_user');
-            if (username.toLowerCase() === "garcia bletna" || username.toLowerCase() === "garciabletna") {
-                alert("Compte Fondateur : Abonnés illimités (X) !");
-                return;
-            }
-
-            let currentFollowers = parseInt(localStorage.getItem('followers_' + username)) || 0;
-            if (isFollowing) {
-                currentFollowers -= 1;
-                isFollowing = false;
-                alert("Désabonné avec succès.");
-            } else {
-                currentFollowers += 1;
-                isFollowing = true;
-                alert("Abonné avec succès !");
-            }
-            localStorage.setItem('followers_' + username, currentFollowers);
-            document.getElementById('followers-count').innerText = currentFollowers;
-        }
-
-        // Navigation entre les onglets du bas
         function switchTab(tabName, element) {
-            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-
-            document.getElementById('page-' + tabName).classList.add('active');
+            
+            document.getElementById('section-' + tabName).classList.add('active');
             element.classList.add('active');
         }
+
+        function toggleFollow() {
+            if(userData.username === "garciabletna") return; // Le profil principal garde X
+            let followersElem = document.getElementById('stat-followers');
+            if(userData.followers === 0) {
+                userData.followers = 1;
+            } else {
+                userData.followers = 0;
+            }
+            followersElem.innerText = userData.followers;
+            localStorage.setItem('gb_user', JSON.stringify(userData));
+        }
+
+        function addContact() {
+            const nameInput = document.getElementById('new-contact-name');
+            const name = nameInput.value.trim();
+            if(!name) return;
+
+            userData.contacts.push({ name: name, time: "Il y a un instant" });
+            localStorage.setItem('gb_user', JSON.stringify(userData));
+            nameInput.value = '';
+            renderContacts();
+        }
+
+        function renderContacts() {
+            const list = document.getElementById('contact-list');
+            list.innerHTML = '';
+            if(userData.contacts.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-gray); font-size:13px;">Aucune discussion active.</p>';
+                return;
+            }
+            userData.contacts.forEach((contact, index) => {
+                list.innerHTML += `
+                    <div class="contact-card" onclick="openChat('${contact.name}')">
+                        <div>
+                            <strong>${contact.name}</strong>
+                            <div style="font-size:12px; color:var(--text-gray);">Appuyer pour discuter</div>
+                        </div>
+                        <span style="color:var(--accent-green);">💬</span>
+                    </div>
+                `;
+            });
+        }
+
+        function openChat(name) {
+            alert("Ouverture du chat direct avec " + name);
+        }
+
+        function editProfile() {
+            const newName = prompt("Entrez votre nouveau nom d'utilisateur :", userData.username);
+            if(newName) {
+                userData.username = newName;
+                userData.isOwner = (newName.toLowerCase() === "garciabletna");
+                userData.followers = userData.isOwner ? "X" : 0;
+                localStorage.setItem('gb_user', JSON.stringify(userData));
+                location.reload();
+            }
+        }
+
+        function resetAccount() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        renderContacts();
     </script>
 </body>
 </html>
