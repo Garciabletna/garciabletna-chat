@@ -1,367 +1,475 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>garciabletna - Réseau Sécurisé</title>
+    <title>Garciabletna - Secure Chat Elite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #0b0b0b; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 414px; height: 100vh; max-height: 896px; background: #000; display: flex; flex-direction: column; position: relative; overflow: hidden; border: 1px solid #222; }
-        
-        /* Header */
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
-        .logo { font-size: 22px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
-        
-        /* Content Views */
-        .view { flex: 1; overflow-y: auto; display: none; padding-bottom: 70px; }
-        .view.active { display: block; }
+        :root {
+            --bg-color: #030303;
+            --neon-green: #00FF66;
+            --neon-glow: 0 0 20px rgba(0, 255, 102, 0.4), 0 0 40px rgba(0, 255, 102, 0.15);
+            --border-green: #00CC52;
+            --card-bg: #0A0A0A;
+            --text-gray: #999999;
+            --error-red: #FF3333;
+        }
 
-        /* Login Screen */
-        #login-view { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; }
-        #login-view h1 { color: #00ff66; margin-bottom: 30px; font-style: italic; font-size: 28px; text-shadow: 0 0 15px rgba(0,255,102,0.5); }
-        .input-box { width: 100%; background: #121212; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 15px; font-size: 16px; outline: none; }
-        .input-box:focus { border-color: #00ff66; }
-        .btn-main { width: 100%; background: #00ff66; color: #000; font-weight: bold; padding: 14px; border-radius: 10px; border: none; font-size: 16px; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,102,0.3); transition: 0.2s; }
-        .btn-main:active { transform: scale(0.98); }
+        body {
+            background-color: var(--bg-color);
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        /* Profile Screen */
-        .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; }
-        .avatar-container { position: relative; width: 85px; height: 85px; border-radius: 50%; background: linear-gradient(45deg, #00ff66, #00ffff); padding: 3px; cursor: pointer; }
-        .avatar { width: 100%; height: 100%; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-info { flex: 1; }
-        .username { font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #fff; }
-        .stats-bar { display: flex; justify-content: space-around; padding: 15px 20px; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; text-align: center; }
-        .stat-num { font-weight: bold; color: #00ff66; font-size: 16px; }
-        .stat-label { font-size: 12px; color: #888; }
-        .profile-actions { display: flex; gap: 10px; padding: 15px 20px; }
-        .btn-action { flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        
-        /* Posts Grid / Add Post Button */
-        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
-        .post-item { aspect-ratio: 1; background: #121212; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; position: relative; overflow: hidden; border: 1px dashed #333; }
-        .add-post-btn { background: #0a0a0a; color: #00ff66; font-size: 28px; cursor: pointer; border: 1px dashed #00ff66; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 4px; transition: 0.2s; }
-        .add-post-btn:hover { background: rgba(0,255,102,0.1); }
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-        /* Chat & Search View */
-        .chat-container { display: flex; flex-direction: column; height: 100%; padding: 15px; }
-        .search-bar { display: flex; gap: 10px; margin-bottom: 15px; }
-        .chat-messages { flex: 1; overflow-y: auto; background: #080808; border-radius: 10px; padding: 15px; border: 1px solid #1a1a1a; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .message { padding: 10px 14px; border-radius: 10px; max-width: 80%; font-size: 14px; }
-        .message.sent { background: #00ff66; color: #000; align-self: flex-end; }
-        .message.received { background: #1a1a1a; color: #fff; align-self: flex-start; }
-        .chat-input-area { display: flex; gap: 10px; }
+        .active-screen {
+            display: flex;
+        }
 
-        /* Call Screen */
-        .call-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 30px; }
-        .call-avatar { width: 120px; height: 120px; border-radius: 50%; background: #1a1a1a; border: 2px solid #00ff66; margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #00ff66; }
-        .call-status { color: #888; margin-bottom: 40px; font-size: 16px; }
-        .call-buttons { display: flex; gap: 30px; }
-        .call-btn { width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .call-btn.hangup { background: #ff3b30; color: #fff; }
-        .call-btn.accept { background: #00ff66; color: #000; }
+        .main-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--card-bg);
+            border: 1px solid #1a1a1a;
+            padding: 30px 25px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
 
-        /* Bottom Nav */
-        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 65px; background: #050505; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
-        .nav-item { background: none; border: none; color: #666; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .nav-item.active { color: #00ff66; }
-        .nav-item span.icon { font-size: 20px; }
+        h1 {
+            color: var(--neon-green);
+            text-shadow: var(--neon-glow);
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-family: 'Cinzel Decorative', cursive, sans-serif;
+        }
 
-        /* System Security Footer */
-        .security-footer { font-size: 10px; color: #555; text-align: center; margin-top: 20px; line-height: 1.4; }
+        .input-field {
+            width: 100%;
+            background-color: #121212;
+            border: 1px solid #222222;
+            color: #FFFFFF;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
+        }
+
+        .error-msg {
+            color: var(--error-red);
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            text-align: left;
+            width: 100%;
+            display: none;
+        }
+
+        /* Accords de confidentialité */
+        .legal-box {
+            background-color: #121212;
+            border: 1px solid #222222;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            max-height: 130px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+
+        .checkbox-container input {
+            accent-color: var(--neon-green);
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        /* Page de bienvenue visuelle */
+        .welcome-emblem {
+            font-size: 4rem;
+            color: var(--neon-green);
+            text-shadow: var(--neon-glow);
+            margin: 15px 0;
+        }
+
+        .welcome-text {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn-primary-salon {
+            width: 100%;
+            background-color: var(--neon-green);
+            color: #000000;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: var(--neon-glow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-primary-salon:active {
+            transform: scale(0.98);
+        }
+
+        .btn-disabled {
+            background-color: #1c1c1c;
+            color: #444444;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Interface de messagerie pro en béton */
+        #chat-screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background-color: var(--bg-color);
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chat-title {
+            color: var(--neon-green);
+            font-family: 'Cinzel Decorative', cursive, sans-serif;
+            font-size: 1.1rem;
+            text-shadow: var(--neon-glow);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .message {
+            background-color: var(--card-bg);
+            border: 1px solid #1c1c1c;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 82%;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .message.founder-msg {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.25);
+        }
+
+        .msg-user {
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .msg-text {
+            font-size: 0.95rem;
+            color: #FFFFFF;
+            word-break: break-word;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chat-input {
+            flex: 1;
+            background-color: #121212;
+            border: 1px solid #222222;
+            color: #FFFFFF;
+            padding: 12px 15px;
+            border-radius: 10px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .chat-input:focus {
+            border-color: var(--neon-green);
+        }
+
+        .btn-send {
+            background-color: var(--neon-green);
+            color: #000;
+            border: none;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: var(--neon-glow);
+        }
+
+        footer {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            border-top: 1px solid #1a1a1a;
+            margin-top: 10px;
+        }
+        footer .founder { color: var(--neon-green); font-weight: bold; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    
-    <!-- 1. VUE CONNEXION / INSCRIPTION -->
-    <div id="login-view" class="view active">
-        <div class="logo" style="font-size: 32px; margin-bottom: 20px;">garcia bletna</div>
-        <input type="text" id="pseudo-input" class="input-box" placeholder="Entre ton pseudo...">
-        <button class="btn-main" onclick="registerUser()">Rejoindre le Salon</button>
-        <div class="security-footer">
-            PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR<br>
-            Protocole de sécurité 2026. Chiffrement de bout en bout, compatibilité VPN active et respect des normes de confidentialité strictes.
+    <!-- ÉCRAN 1 : IDENTIFICATION RIGOUROUSE (PSEUDO MINUSCULE & MDP 4-8 CARAC) -->
+    <div id="pseudo-screen" class="screen active-screen">
+        <div class="main-container">
+            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+            <div style="font-size: 0.85rem; color: var(--neon-green); margin-bottom: 15px; font-weight: bold;">AUTHENTIFICATION DU RÉSEAU</div>
+
+            <input type="text" id="pseudo-input" class="input-field" placeholder="Pseudo (minuscules sans espaces)..." oninput="formatPseudo(this)">
+            <div id="pseudo-error" class="error-msg">⚠️ Pseudo invalide (minuscules, chiffres, min. 3 caractères).</div>
+
+            <input type="password" id="password-input" class="input-field" maxlength="8" placeholder="Mot de passe (4 à 8 caractères)...">
+            <div id="password-error" class="error-msg">⚠️ Le mot de passe doit contenir entre 4 et 8 caractères.</div>
+
+            <button class="btn-primary-salon" onclick="validateAndProceed()">
+                <span>🔱</span> Suivant : Confidentialité
+            </button>
+        </div>
+
+        <footer>
+            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+            <div class="security-note">Chiffrement strict 2026</div>
+        </footer>
+    </div>
+
+    <!-- ÉCRAN 2 : ACCORDS DE CONFIDENTIALITÉ & SÉCURITÉ -->
+    <div id="legal-screen" class="screen">
+        <div class="main-container">
+            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+            <div style="font-size: 0.8rem; color: var(--neon-green); margin-bottom: 10px; font-weight: bold;">ACCORD DE SÉCURITÉ & CONFIDENTIALITÉ</div>
+            
+            <div class="legal-box">
+                En accédant à la plateforme Garciabletna, vous certifiez respecter l'intégrité du réseau. L'utilisation de faux profils, l'usurpation d'identité, toute tentative de piratage, d'injection de code malveillant ou de contournement des protocoles de sécurité est formellement interdite. 
+                <br><br>
+                Tout contrevenant fera l'objet de poursuites judiciaires immédiates devant les juridictions compétentes. Propriété exclusive de Garciabletna.
+            </div>
+
+            <label class="checkbox-container">
+                <input type="checkbox" id="accept-terms" onchange="toggleLegalButton()">
+                <span>J'accepte les conditions de sécurité et les accords de confidentialité 2026.</span>
+            </label>
+
+            <button id="btn-proceed" class="btn-primary-salon btn-disabled" onclick="goToWelcomeScreen()" disabled>
+                Valider & Continuer 🔱
+            </button>
+        </div>
+
+        <footer>
+            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+            <div class="security-note">Protection VPN active</div>
+        </footer>
+    </div>
+
+    <!-- ÉCRAN 3 : PAGE DE BIENVENUE VISUELLE -->
+    <div id="welcome-visual-screen" class="screen">
+        <div class="main-container">
+            <h1>𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆</h1>
+            
+            <div class="welcome-emblem">🔱</div>
+            
+            <div class="welcome-text">
+                Bienvenue dans l'univers exclusif et sécurisé. Un espace épuré, pur et moderne réservé à une communauté connectée d'élite.
+            </div>
+
+            <button class="btn-primary-salon" onclick="enterChat()">
+                Entrer dans le Salon 🔱
+            </button>
+        </div>
+
+        <footer>
+            <div class="founder">PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR</div>
+            <div class="security-note">Communauté Officielle 2026</div>
+        </footer>
+    </div>
+
+    <!-- ÉCRAN 4 : INTERFACE DE MESSAGERIE INTERNE PRO -->
+    <div id="chat-screen" class="screen">
+        <div class="chat-header">
+            <span class="chat-title">𝖌𝖆𝖗𝖈𝖎𝖆 𝖇𝖑𝖊𝖙𝖓𝖆 🔱</span>
+            <span style="font-size: 0.8rem; color: var(--neon-green);" id="display-pseudo"></span>
+        </div>
+
+        <div class="chat-messages" id="message-box">
+            <div class="message founder-msg">
+                <div class="msg-user">garciabletna 🔱✨</div>
+                <div class="msg-text">Bienvenue dans le salon officiel sécurisé. Le chiffrement est actif.</div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="user-message" class="chat-input" placeholder="Écris ton message..." onkeypress="checkEnter(event)">
+            <button class="btn-send" onclick="sendMessage()">Envoyer</button>
         </div>
     </div>
 
-    <!-- 2. VUE ACCUEIL / PROFIL -->
-    <div id="home-view" class="view">
-        <header>
-            <div class="logo" id="header-username">garciabletna</div>
-            <span style="font-size: 22px; cursor: pointer;" onclick="triggerNotification()">❤️</span>
-        </header>
-
-        <div class="profile-header">
-            <div class="avatar-container" onclick="addStory()">
-                <div class="avatar">
-                    <span style="font-size: 30px;">👤</span>
-                </div>
-            </div>
-            <div class="profile-info">
-                <div class="username" id="display-username">garciabletna</div>
-                <div style="font-size: 12px; color: #888;">Appuyez sur la photo pour ajouter une story</div>
-            </div>
-        </div>
-
-        <div class="stats-bar">
-            <div>
-                <div class="stat-num" id="stat-posts">0</div>
-                <div class="stat-label">publications</div>
-            </div>
-            <div>
-                <div class="stat-num" id="stat-followers">0</div>
-                <div class="stat-label">abonnés</div>
-            </div>
-            <div>
-                <div class="stat-num" id="stat-following">142</div>
-                <div class="stat-label">suivis</div>
-            </div>
-        </div>
-
-        <div class="profile-actions">
-            <button class="btn-action" onclick="editProfile()">Modifier profil</button>
-            <button class="btn-action" id="follow-btn" onclick="toggleFollow()">S'abonner</button>
-        </div>
-
-        <!-- Grille dynamique des publications avec bouton d'ajout (+) -->
-        <div class="posts-grid" id="posts-grid-container">
-            <div class="add-post-btn" onclick="createNewPost()">+</div>
-        </div>
-    </div>
-
-    <!-- 3. VUE DISCUSSION / CHAT AVEC ALGORITHME DE COMPTE -->
-    <div id="chat-view" class="view">
-        <header>
-            <div class="logo">Messages</div>
-        </header>
-        <div class="chat-container">
-            <div class="search-bar">
-                <input type="text" id="target-user" class="input-box" placeholder="Rechercher un pseudo valide..." style="margin-bottom:0;">
-                <button class="btn-main" style="width: 100px;" onclick="verifyAndOpenChat()">Chercher</button>
-            </div>
-            <div class="chat-messages" id="chat-box">
-                <div style="color: #555; text-align: center; margin-top: 20px;" id="chat-info-text">Recherchez un compte enregistré pour lancer la discussion.</div>
-            </div>
-            <div class="chat-input-area">
-                <input type="text" id="message-input" class="input-box" placeholder="Écrire un message sécurisé..." style="margin-bottom:0;" disabled>
-                <button class="btn-main" id="send-btn" style="width: 80px;" onclick="sendMessage()" disabled>Envoyer</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. VUE APPEL MODERNE -->
-    <div id="call-view" class="view">
-        <div class="call-screen">
-            <div class="call-avatar">📞</div>
-            <h2 id="call-target-name">Service d'Appel Sécurisé</h2>
-            <div class="call-status" id="call-status-text">Prêt à émettre ou recevoir un appel</div>
-            <div class="call-buttons">
-                <button class="call-btn accept" onclick="startCall()">📞</button>
-                <button class="call-btn hangup" onclick="endCall()">❌</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 5. VUE RÉGLAGES -->
-    <div id="settings-view" class="view">
-        <header><div class="logo">Réglages</div></header>
-        <div style="padding: 20px; color: #aaa; line-height: 1.8;">
-            <p><strong>Compte actif :</strong> <span id="settings-pseudo" style="color:#00ff66;">-</span></p>
-            <p><strong>Statut du Serveur :</strong> Synchronisé (Actif)</p>
-            <p><strong>Protocole :</strong> Chiffrement de bout en bout 2026</p>
-            <br>
-            <button class="btn-main" onclick="logout()" style="background:#ff3b30; color:#fff;">Se déconnecter</button>
-        </div>
-    </div>
-
-    <!-- BARRE DE NAVIGATION INFÉRIEURE -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('home-view', this)">
-            <span class="icon">🏠</span>Accueil
-        </button>
-        <button class="nav-item" onclick="switchTab('chat-view', this)">
-            <span class="icon">💬</span>Discussion
-        </button>
-        <button class="nav-item" onclick="switchTab('call-view', this)">
-            <span class="icon">📞</span>Appel
-        </button>
-        <button class="nav-item" onclick="switchTab('settings-view', this)">
-            <span class="icon">⚙️</span>Réglages
-        </button>
-    </nav>
-
-</div>
-
-<script>
-    // Base de données simulée synchronisée en local (Stockage Serveur Local)
-    let registeredUsers = JSON.parse(localStorage.getItem('gb_users')) || ["garciabletna", "admin", "berrussama"];
-    let currentUser = localStorage.getItem('gb_current_user') || null;
-    let userPosts = JSON.parse(localStorage.getItem('gb_posts')) || [];
-    let isFollowing = false;
-    let followersCount = 1250;
-
-    // Initialisation au démarrage
-    window.onload = function() {
-        if (currentUser) {
-            activateApp(currentUser);
+    <script>
+        // Force automatiquement le pseudo en minuscules (style Instagram) et supprime les espaces
+        function formatPseudo(input) {
+            input.value = input.value.toLowerCase().replace(/\s+/g, '');
         }
-    };
 
-    function registerUser() {
-        let pseudo = document.getElementById('pseudo-input').value.trim().toLowerCase();
-        if (!pseudo) {
-            alert("Veuillez entrer un pseudo valide.");
-            return;
+        function validateAndProceed() {
+            const pseudo = document.getElementById('pseudo-input').value.trim();
+            const password = document.getElementById('password-input').value.trim();
+            
+            let isValid = true;
+
+            // Validation rigoureuse du pseudo (minimum 3 caractères, minuscules/chiffres uniquement)
+            const pseudoRegex = /^[a-z0-9_]{3,}$/;
+            if (!pseudoRegex.test(pseudo)) {
+                document.getElementById('pseudo-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('pseudo-error').style.display = 'none';
+            }
+
+            // Validation rigoureuse du mot de passe (entre 4 et 8 caractères stricts)
+            if (password.length < 4 || password.length > 8) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+
+            if (!isValid) return;
+
+            // Passage à l'écran de confidentialité
+            document.getElementById('pseudo-screen').classList.remove('active-screen');
+            document.getElementById('legal-screen').classList.add('active-screen');
         }
-        // Synchronisation sur le "serveur" (localStorage)
-        if (!registeredUsers.includes(pseudo)) {
-            registeredUsers.push(pseudo);
-            localStorage.setItem('gb_users', JSON.stringify(registeredUsers));
+
+        function toggleLegalButton() {
+            const checkbox = document.getElementById('accept-terms');
+            const btn = document.getElementById('btn-proceed');
+            if (checkbox.checked) {
+                btn.classList.remove('btn-disabled');
+                btn.removeAttribute('disabled');
+            } else {
+                btn.classList.add('btn-disabled');
+                btn.setAttribute('disabled', 'true');
+            }
         }
-        currentUser = pseudo;
-        localStorage.setItem('gb_current_user', currentUser);
-        activateApp(currentUser);
-    }
 
-    function activateApp(username) {
-        document.getElementById('login-view').classList.remove('active');
-        document.getElementById('home-view').classList.add('active');
-        document.getElementById('display-username').innerText = username;
-        document.getElementById('header-username').innerText = username;
-        document.getElementById('settings-pseudo').innerText = username;
-        renderPosts();
-    }
-
-    // Gestion des onglets
-    function switchTab(viewId, btnElement) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        btnElement.classList.add('active');
-    }
-
-    // Algorithme de vérification des comptes pour le Chat
-    function verifyAndOpenChat() {
-        let target = document.getElementById('target-user').value.trim().toLowerCase();
-        let chatBox = document.getElementById('chat-box');
-        let messageInput = document.getElementById('message-input');
-        let sendBtn = document.getElementById('send-btn');
-        let infoText = document.getElementById('chat-info-text');
-
-        if (!target) return;
-
-        // Vérification si le compte existe sur le serveur de l'application
-        if (registeredUsers.includes(target)) {
-            if(infoText) infoText.style.display = 'none';
-            chatBox.innerHTML = `<div style="color: #00ff66; text-align: center; font-size: 12px;">Connexion sécurisée établie avec @${target}</div>`;
-            messageInput.disabled = false;
-            sendBtn.disabled = false;
-            chatBox.dataset.activeTarget = target;
-        } else {
-            chatBox.innerHTML = `<div style="color: #ff3b30; text-align: center;">Erreur : Le compte "@${target}" n'existe pas dans le réseau garciabletna.</div>`;
-            messageInput.disabled = true;
-            sendBtn.disabled = true;
+        function goToWelcomeScreen() {
+            document.getElementById('legal-screen').classList.remove('active-screen');
+            document.getElementById('welcome-visual-screen').classList.add('active-screen');
         }
-    }
 
-    function sendMessage() {
-        let input = document.getElementById('message-input');
-        let chatBox = document.getElementById('chat-box');
-        if (!input.value.trim()) return;
-
-        // Affichage du message envoyé
-        let msgDiv = document.createElement('div');
-        msgDiv.className = 'message sent';
-        msgDiv.innerText = input.value;
-        chatBox.appendChild(msgDiv);
-
-        let textSent = input.value;
-        input.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        // Simulation de réponse intelligente du compte destinataire après 1 seconde
-        setTimeout(() => {
-            let replyDiv = document.createElement('div');
-            replyDiv.className = 'message received';
-            replyDiv.innerText = "Reçu 5/5 sur le réseau garciabletna ! (Réponse automatique du système)";
-            chatBox.appendChild(replyDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1000);
-    }
-
-    // Gestion dynamique des publications (Autant de posts qu'on veut)
-    function createNewPost() {
-        let postContent = prompt("Entrez le contenu de votre nouvelle publication (texte ou lien) :");
-        if (postContent) {
-            userPosts.push(postContent);
-            localStorage.setItem('gb_posts', JSON.stringify(userPosts));
-            renderPosts();
+        function enterChat() {
+            const pseudo = document.getElementById('pseudo-input').value.trim();
+            document.getElementById('welcome-visual-screen').classList.remove('active-screen');
+            document.getElementById('chat-screen').classList.add('active-screen');
+            document.getElementById('display-pseudo').innerText = "@" + pseudo;
         }
-    }
 
-    function renderPosts() {
-        let gridContainer = document.getElementById('posts-grid-container');
-        // Garder le bouton "+" en premier ou dernier
-        let html = `<div class="add-post-btn" onclick="createNewPost()">+</div>`;
-        
-        userPosts.forEach((post, index) => {
-            html += `<div class="post-item" style="background:#1a1a1a; padding:10px; font-size:12px; word-break:break-all;">Post ${index + 1}:<br>${post}</div>`;
-        });
-        
-        gridContainer.innerHTML = html;
-        document.getElementById('stat-posts').innerText = userPosts.length;
-    }
-
-    // Story dynamique
-    function addStory() {
-        let storyUrl = prompt("Entrez le lien de votre Story (photo/vidéo) :");
-        if(storyUrl) {
-            alert("Story publiée avec succès sur votre profil !");
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
         }
-    }
 
-    // Algorithme d'abonnement dynamique
-    function toggleFollow() {
-        let btn = document.getElementById('follow-btn');
-        let followersStat = document.getElementById('stat-followers');
-        
-        if (!isFollowing) {
-            isFollowing = true;
-            followersCount++;
-            btn.innerText = "Abonné(e)";
-            btn.style.background = "#333";
-            btn.style.color = "#00ff66";
-        } else {
-            isFollowing = false;
-            followersCount--;
-            btn.innerText = "S'abonner";
-            btn.style.background = "#1a1a1a";
-            btn.style.color = "#fff";
+        function sendMessage() {
+            const input = document.getElementById('user-message');
+            const text = input.value.trim();
+            if(text === "") return;
+
+            const box = document.getElementById('message-box');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.innerHTML = `
+                <div class="msg-user">@${document.getElementById('pseudo-input').value}</div>
+                <div class="msg-text">${text}</div>
+            `;
+            box.appendChild(msgDiv);
+            input.value = "";
+            box.scrollTop = box.scrollHeight;
         }
-        followersStat.innerText = followersCount;
-    }
-
-    // Gestion des Appels Modernes
-    function startCall() {
-        document.getElementById('call-status-text').innerText = "Appel en cours... Connexion chiffrée établie 🟢";
-    }
-
-    function endCall() {
-        document.getElementById('call-status-text').innerText = "Appel terminé ou refusé.";
-    }
-
-    function triggerNotification() {
-        alert("Aucune nouvelle notification pour le moment.");
-    }
-
-    function logout() {
-        localStorage.removeItem('gb_current_user');
-        location.reload();
-    }
-</script>
-
+    </script>
 </body>
 </html>
