@@ -12,9 +12,9 @@
         .view { flex: 1; overflow-y: auto; display: none; padding-bottom: 75px; flex-direction: column; }
         .view.active { display: flex; }
 
-        /* Gestion de l'affichage de la barre de navigation (masquée sur le login) */
-        .bottom-nav { display: none; }
-        .app-container.in-app .bottom-nav { display: flex; }
+        /* CORRECTIF : La barre de navigation est masquée par défaut sur l'écran de login[span_1](start_span)[span_1](end_span) */
+        .bottom-nav { display: none !important; }
+        .app-container.in-app .bottom-nav { display: flex !important; }
 
         /* Écran de Connexion */
         #login-view { justify-content: center; align-items: center; padding: 30px; text-align: center; }
@@ -67,7 +67,7 @@
         .chat-item-preview { font-size: 12px; color: #888; }
 
         /* Vue conversation active */
-        #active-chat-view { display: none; flex-direction: column; height: 100%; }
+        #active-chat-view { display: none; flex-direction: column; height: 100%; position: absolute; top: 0; left: 0; width: 100%; background: #000; z-index: 50; }
         #active-chat-view.active { display: flex; }
         .chat-conversation-area { flex: 1; background: #050505; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .message { padding: 10px 14px; border-radius: 10px; max-width: 80%; font-size: 14px; word-break: break-word; }
@@ -172,7 +172,7 @@
         <div class="posts-grid" id="posts-grid-container"></div>
     </div>
 
-    <!-- 4. DISCUSSION / MESSAGERIE STYLE INSTAGRAM / WHATSAPP -->
+    <!-- 4. DISCUSSION / MESSAGERIE INSTAGRAM & WHATSAPP -->
     <div id="chat-view" class="view">
         <header>
             <div class="logo-header">Discussion</div>
@@ -180,11 +180,9 @@
         </header>
         
         <!-- Liste des conversations -->
-        <div class="chat-list-container" id="chat-list">
-            <!-- Les discussions s'afficheront dynamiquement ici -->
-        </div>
+        <div class="chat-list-container" id="chat-list"></div>
 
-        <!-- Sous-vue : Fenêtre de chat active (cachée par défaut, s'ouvre au clic sur un contact) -->
+        <!-- Fenêtre de chat active (style messagerie privée) -->
         <div id="active-chat-view">
             <header style="background: #080808;">
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -193,9 +191,7 @@
                 </div>
                 <span style="font-size: 12px; color: #888;">Sécurisé 🟢</span>
             </header>
-            <div class="chat-conversation-area" id="active-chat-messages">
-                <!-- Messages de la conversation -->
-            </div>
+            <div class="chat-conversation-area" id="active-chat-messages"></div>
             <div class="chat-bottom-bar">
                 <input type="text" id="active-msg-input" class="input-box" placeholder="Écrire un message..." style="margin-bottom:0;">
                 <button class="btn-salon" style="width: 80px; padding: 10px;" onclick="sendActiveMessage()">Envoyer</button>
@@ -268,9 +264,11 @@
     }
 
     function enterMainApp() {
+        // Active explicitement la classe in-app pour révéler la barre de navigation du bas
+        document.querySelector('.app-container').classList.add('in-app');
+        
         document.getElementById('welcome-view').classList.remove('active');
         document.getElementById('home-view').classList.add('active');
-        document.querySelector('.app-container').classList.add('in-app');
         
         document.getElementById('header-pseudo').innerText = currentUser;
         document.getElementById('profile-pseudo-title').innerText = currentUser;
@@ -344,10 +342,8 @@
         }
     }
 
-    /* Gestionnaire de la liste des messages style Instagram/WhatsApp */
     function renderChatList() {
         let listContainer = document.getElementById('chat-list');
-        // On récupère les utilisateurs enregistrés sauf soi-même
         let otherUsers = registeredUsers.filter(u => u !== currentUser);
         
         if (otherUsers.length === 0) {
@@ -389,12 +385,10 @@
     function openChatWith(username) {
         activeChatUser = username;
         document.getElementById('active-chat-title').innerText = "@" + username;
-        document.getElementById('chat-list').style.display = 'none';
         let activeView = document.getElementById('active-chat-view');
         activeView.style.display = 'flex';
         activeView.classList.add('active');
 
-        // Charger l'historique des messages pour ce contact
         let chatKey = 'gb_chat_' + currentUser + '_' + username;
         let messages = JSON.parse(localStorage.getItem(chatKey)) || [];
         let msgBox = document.getElementById('active-chat-messages');
@@ -411,7 +405,6 @@
         let activeView = document.getElementById('active-chat-view');
         activeView.style.display = 'none';
         activeView.classList.remove('active');
-        document.getElementById('chat-list').style.display = 'flex';
     }
 
     function sendActiveMessage() {
@@ -428,11 +421,10 @@
         openChatWith(activeChatUser);
         input.value = '';
 
-        // Simulation de réponse automatique après 1 seconde
         setTimeout(() => {
             messages.push({ sender: activeChatUser, text: "Message reçu et chiffré sur Bletigram. 🟢" });
             localStorage.setItem(chatKey, JSON.stringify(messages));
-            if (activeChatUser === activeChatUser) openChatWith(activeChatUser);
+            if (activeChatUser) openChatWith(activeChatUser);
         }, 1000);
     }
 
