@@ -11,12 +11,13 @@
             --accent-green: #00ff66;
             --text-color: #ffffff;
             --text-gray: #888888;
+            --border-color: #222222;
         }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
             background-color: var(--bg-color);
@@ -24,105 +25,109 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            padding-bottom: 70px;
+            padding-bottom: 75px;
         }
+        /* En-tête fidèle au design d'origine */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            font-size: 22px;
-            font-weight: bold;
-            font-style: italic;
-            color: var(--accent-green);
-            border-bottom: 1px solid #222;
+            padding: 12px 20px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            border-bottom: 1px solid var(--border-color);
         }
         .header-left {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            font-style: italic;
+            color: var(--accent-green);
         }
         .header-right {
             cursor: pointer;
             font-size: 20px;
         }
+        /* Section Profil / Accueil */
         .profile-container {
-            padding: 20px;
-            text-align: center;
+            padding: 15px 20px;
+        }
+        .profile-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
         .profile-pic-wrapper {
             position: relative;
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 10px auto;
+            width: 82px;
+            height: 82px;
             border-radius: 50%;
             border: 2px solid var(--accent-green);
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
             overflow: hidden;
+            cursor: pointer;
         }
         .profile-pic-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .username-row {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
+        .profile-stats {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-        }
-        .bio-hint {
-            font-size: 13px;
-            color: var(--text-gray);
-            margin-bottom: 20px;
-        }
-        .stats-box {
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--card-bg);
-            border: 1px solid #222;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .stat-item {
+            gap: 25px;
             text-align: center;
         }
         .stat-num {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .stat-num.green {
-            color: var(--accent-green);
+            font-size: 17px;
+            font-weight: 700;
         }
         .stat-label {
             font-size: 12px;
             color: var(--text-gray);
-            margin-top: 3px;
+            margin-top: 2px;
+        }
+        .username-row {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .bio-hint {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 15px;
         }
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
         }
         .btn {
             flex: 1;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             border: 1px solid #333;
-            background-color: var(--card-bg);
+            background-color: #1a1a1a;
             color: var(--text-color);
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
-            font-size: 14px;
+            text-align: center;
         }
+        .btn:active {
+            background-color: #333;
+        }
+        /* Grille des posts */
         .posts-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
+            gap: 3px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 3px;
         }
         .post-tile {
             background-color: var(--card-bg);
@@ -131,39 +136,10 @@
             align-items: center;
             justify-content: center;
             color: var(--text-gray);
-            font-size: 12px;
-            border: 1px solid #222;
-        }
-        /* Navigation Bar */
-        nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 1000;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-gray);
             font-size: 11px;
-            cursor: pointer;
-            text-decoration: none;
+            border: 1px solid #111;
         }
-        .nav-item.active {
-            color: var(--accent-green);
-        }
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 3px;
-        }
-        /* Section views */
+        /* Vues des sections */
         .view-section {
             display: none;
             padding: 20px;
@@ -171,74 +147,155 @@
         .view-section.active {
             display: block;
         }
-        /* Add contact & chat styles */
-        .add-contact-box {
+        /* Discussions & Contacts */
+        .chat-container, .call-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 12px;
         }
-        .add-contact-box input {
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .search-box input {
             flex: 1;
-            padding: 10px;
+            padding: 10px 12px;
             border-radius: 8px;
             border: 1px solid #333;
             background: var(--card-bg);
             color: white;
+            font-size: 14px;
+            outline: none;
         }
-        .contact-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .contact-card {
+        .item-card {
             background: var(--card-bg);
-            padding: 12px;
-            border-radius: 8px;
+            padding: 12px 15px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #222;
+            border: 1px solid var(--border-color);
             cursor: pointer;
+        }
+        .item-card:active {
+            background: #1f1f1f;
+        }
+        /* Barre de navigation inférieure fixe */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #050505;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 12px 0;
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-gray);
+            font-size: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            gap: 3px;
+        }
+        .nav-item.active {
+            color: var(--accent-green);
+        }
+        .nav-icon {
+            font-size: 22px;
+        }
+        /* Interface de chat direct interne */
+        #chat-room {
+            display: none;
+            flex-direction: column;
+            height: calc(100vh - 130px);
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .msg {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .msg.sent {
+            background-color: #004d26;
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .msg.received {
+            background-color: #1a1a1a;
+            color: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .chat-input-bar {
+            display: flex;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+        .chat-input-bar input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            background: var(--card-bg);
+            color: white;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
+    <!-- En-tête avec GG collé et le trident -->
     <header>
         <div class="header-left">
             <span>GG</span> garciabletna
         </div>
-        <div class="header-right" id="top-emoji">🔱</div>
+        <div class="header-right">🔱</div>
     </header>
 
-    <!-- ACCUEIL / PROFIL -->
+    <!-- SECTION ACCUEIL / PROFIL -->
     <div id="section-accueil" class="view-section active">
         <div class="profile-container">
-            <div class="profile-pic-wrapper">
-                <img src="" id="profile-img" alt="Avatar">
+            <div class="profile-top">
+                <div class="profile-pic-wrapper" onclick="editProfilePicture()">
+                    <img id="profile-img" src="" alt="Avatar">
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-num" id="stat-posts">3</div>
+                        <div class="stat-label">publications</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" id="stat-followers">X</div>
+                        <div class="stat-label">abonnés</div>
+                    </div>
+                </div>
             </div>
+
             <div class="username-row">
                 <span id="display-username">garciabletna</span> ⚡
             </div>
-            <div class="bio-hint">Appuyez sur la photo pour modifier</div>
-
-            <div class="stats-box">
-                <div class="stat-item">
-                    <div class="stat-num" id="stat-posts">3</div>
-                    <div class="stat-label">publications</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num" id="stat-followers">X</div>
-                    <div class="stat-label">abonnés</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-num green" id="stat-following">142</div>
-                    <div class="stat-label">suivis</div>
-                </div>
-            </div>
+            <div class="bio-hint">Appuyez sur la photo pour modifier le profil</div>
 
             <div class="action-buttons">
-                <button class="btn" onclick="editProfile()">Modifier profil</button>
+                <button class="btn" onclick="editProfileName()">Modifier profil</button>
                 <button class="btn" onclick="toggleFollow()">S'abonner</button>
             </div>
 
@@ -250,34 +307,52 @@
         </div>
     </div>
 
-    <!-- DISCUSSION -->
+    <!-- SECTION DISCUSSION -->
     <div id="section-discussion" class="view-section">
-        <h2>Discussions</h2>
-        <p style="color:var(--text-gray); font-size:13px; margin: 10px 0;">Ajoutez quelqu'un pour discuter directement.</p>
-        <div class="add-contact-box">
-            <input type="text" id="new-contact-name" placeholder="Nom de la personne...">
-            <button class="btn" onclick="addContact()" style="background:var(--accent-green); color:black;">Ajouter</button>
+        <div id="contact-list-view">
+            <h2 style="font-size: 18px; margin-bottom: 12px;">Discussions</h2>
+            <div class="search-box">
+                <input type="text" id="new-contact-name" placeholder="Nom ou pseudo à ajouter...">
+                <button class="btn" onclick="addContact()" style="background:var(--accent-green); color:black; flex: 0; padding: 0 15px;">Ajouter</button>
+            </div>
+            <div class="chat-container" id="contact-list">
+                <!-- Les contacts dynamiques s'affichent ici -->
+            </div>
         </div>
-        <div class="contact-list" id="contact-list">
-            <!-- Les contacts ajoutés apparaîtront ici -->
+
+        <!-- Fenêtre de chat interne -->
+        <div id="chat-room">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 10px;">
+                <button class="btn" onclick="closeChat()" style="flex:0; padding: 4px 10px;">← Retour</button>
+                <h3 id="chat-with-name" style="font-size: 15px;">Discussion</h3>
+                <button class="btn" onclick="triggerCall()" style="flex:0; padding: 4px 10px; background: #004d26;">📞</button>
+            </div>
+            <div class="chat-messages" id="chat-messages-box">
+                <!-- Messages -->
+            </div>
+            <div class="chat-input-bar">
+                <input type="text" id="chat-msg-input" placeholder="Écrire un message..." onkeypress="handleKeyPress(event)">
+                <button class="btn" onclick="sendChatMessage()" style="background:var(--accent-green); color:black; flex:0; padding: 0 15px; border-radius: 20px;">Envoyer</button>
+            </div>
         </div>
     </div>
 
-    <!-- APPEL -->
+    <!-- SECTION APPEL -->
     <div id="section-appel" class="view-section">
-        <h2>Historique des appels</h2>
-        <p style="color: var(--text-gray); margin-top: 20px; text-align: center;" id="call-empty-msg">Aucun appel récent.</p>
-        <div id="call-list"></div>
+        <h2 style="font-size: 18px; margin-bottom: 15px;">Historique des appels</h2>
+        <div class="call-container" id="call-list">
+            <p style="color: var(--text-gray); font-size: 13px; text-align: center; margin-top: 30px;">Aucun appel récent dans l'historique.</p>
+        </div>
     </div>
 
-    <!-- REGLAGES -->
+    <!-- SECTION REGLAGES -->
     <div id="section-reglages" class="view-section">
-        <h2>Réglages</h2>
-        <p style="color: var(--text-gray); margin-top: 10px;">Gestion du compte et de l'application.</p>
-        <button class="btn" onclick="resetAccount()" style="margin-top: 20px; border-color: red; color: red;">Réinitialiser le compte</button>
+        <h2 style="font-size: 18px; margin-bottom: 15px;">Réglages du compte</h2>
+        <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 20px;">Gérez vos préférences et la configuration de l'application.</p>
+        <button class="btn" onclick="resetAppData()" style="border-color: #ff3b30; color: #ff3b30; background: transparent;">Réinitialiser l'application</button>
     </div>
 
-    <!-- BARRE DE NAVIGATION -->
+    <!-- BARRE DE NAVIGATION INFÉRIEURE AVEC LE TRIDENT 🔱 -->
     <nav>
         <div class="nav-item active" onclick="switchTab('accueil', this)">
             <span class="nav-icon">🏠</span>
@@ -298,98 +373,199 @@
     </nav>
 
     <script>
-        // Gestion des données utilisateur et de l'algorithme des abonnés
-        let userData = JSON.parse(localStorage.getItem('gb_user')) || {
+        // Gestion des données persistantes
+        let appData = JSON.parse(localStorage.getItem('gb_chat_data')) || {
             username: "garciabletna",
-            isOwner: true,
             followers: "X",
-            following: 142,
-            postsCount: 3,
-            contacts: []
+            posts: 3,
+            contacts: [],
+            calls: [],
+            messages: {}
         };
 
-        // Si ce n'est pas le compte principal, les abonnés commencent à 0
-        if(userData.username !== "garciabletna" && userData.followers === "X") {
-            userData.followers = 0;
+        // Algorithme abonnés : X pour le compte principal, 0 pour les nouveaux comptes créés
+        if(appData.username !== "garciabletna" && appData.followers === "X") {
+            appData.followers = 0;
         }
 
-        document.getElementById('display-username').innerText = userData.username;
-        document.getElementById('stat-followers').innerText = userData.followers;
-        document.getElementById('stat-following').innerText = userData.following;
-        document.getElementById('stat-posts').innerText = userData.postsCount;
+        // Initialisation de l'affichage du profil
+        document.getElementById('display-username').innerText = appData.username;
+        document.getElementById('stat-followers').innerText = appData.followers;
+        document.getElementById('stat-posts').innerText = appData.posts;
 
+        let activeChatContact = null;
+
+        // Navigation entre les onglets
         function switchTab(tabName, element) {
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             
             document.getElementById('section-' + tabName).classList.add('active');
             element.classList.add('active');
-        }
 
-        function toggleFollow() {
-            if(userData.username === "garciabletna") return; // Le profil principal garde X
-            let followersElem = document.getElementById('stat-followers');
-            if(userData.followers === 0) {
-                userData.followers = 1;
-            } else {
-                userData.followers = 0;
+            if(tabName === 'discussion') {
+                closeChat();
+                renderContacts();
+            } else if(tabName === 'appel') {
+                renderCalls();
             }
-            followersElem.innerText = userData.followers;
-            localStorage.setItem('gb_user', JSON.stringify(userData));
         }
 
+        // Gestion de l'abonnement dynamique
+        function toggleFollow() {
+            if(appData.username === "garciabletna") return; // Reste X pour ton profil principal
+            let fElem = document.getElementById('stat-followers');
+            appData.followers = appData.followers === 0 ? 1 : 0;
+            fElem.innerText = appData.followers;
+            saveData();
+        }
+
+        // Modification du profil
+        function editProfileName() {
+            let newName = prompt("Modifier votre nom d'utilisateur :", appData.username);
+            if(newName && newName.trim() !== "") {
+                appData.username = newName.trim();
+                appData.followers = (appData.username.toLowerCase() === "garciabletna") ? "X" : 0;
+                saveData();
+                location.reload();
+            }
+        }
+
+        function editProfilePicture() {
+            let imgUrl = prompt("Entrez le lien direct de votre photo de profil (URL) :");
+            if(imgUrl) {
+                document.getElementById('profile-img').src = imgUrl;
+                localStorage.setItem('gb_profile_img', imgUrl);
+            }
+        }
+
+        // Charger l'image de profil enregistrée si elle existe
+        let savedImg = localStorage.getItem('gb_profile_img');
+        if(savedImg) {
+            document.getElementById('profile-img').src = savedImg;
+        }
+
+        // Gestion des contacts et des chats directs
         function addContact() {
-            const nameInput = document.getElementById('new-contact-name');
-            const name = nameInput.value.trim();
+            let input = document.getElementById('new-contact-name');
+            let name = input.value.trim();
             if(!name) return;
 
-            userData.contacts.push({ name: name, time: "Il y a un instant" });
-            localStorage.setItem('gb_user', JSON.stringify(userData));
-            nameInput.value = '';
+            if(!appData.contacts.includes(name)) {
+                appData.contacts.push(name);
+                appData.messages[name] = appData.messages[name] || [];
+                saveData();
+            }
+            input.value = '';
             renderContacts();
         }
 
         function renderContacts() {
-            const list = document.getElementById('contact-list');
+            let list = document.getElementById('contact-list');
             list.innerHTML = '';
-            if(userData.contacts.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-gray); font-size:13px;">Aucune discussion active.</p>';
+            if(appData.contacts.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-gray); font-size:13px; text-align:center; margin-top:20px;">Aucune discussion. Ajoutez un contact pour commencer.</p>';
                 return;
             }
-            userData.contacts.forEach((contact, index) => {
+            appData.contacts.forEach(contact => {
                 list.innerHTML += `
-                    <div class="contact-card" onclick="openChat('${contact.name}')">
+                    <div class="item-card" onclick="openChat('${contact}')">
                         <div>
-                            <strong>${contact.name}</strong>
-                            <div style="font-size:12px; color:var(--text-gray);">Appuyer pour discuter</div>
+                            <strong>${contact}</strong>
+                            <div style="font-size:11px; color:var(--text-gray); margin-top:2px;">Appuyer pour ouvrir le chat</div>
                         </div>
-                        <span style="color:var(--accent-green);">💬</span>
+                        <span style="color:var(--accent-green); font-size:18px;">💬</span>
                     </div>
                 `;
             });
         }
 
         function openChat(name) {
-            alert("Ouverture du chat direct avec " + name);
+            activeChatContact = name;
+            document.getElementById('contact-list-view').style.display = 'none';
+            document.getElementById('chat-room').style.display = 'flex';
+            document.getElementById('chat-with-name').innerText = name;
+            renderMessages();
         }
 
-        function editProfile() {
-            const newName = prompt("Entrez votre nouveau nom d'utilisateur :", userData.username);
-            if(newName) {
-                userData.username = newName;
-                userData.isOwner = (newName.toLowerCase() === "garciabletna");
-                userData.followers = userData.isOwner ? "X" : 0;
-                localStorage.setItem('gb_user', JSON.stringify(userData));
-                location.reload();
+        function closeChat() {
+            activeChatContact = null;
+            document.getElementById('chat-room').style.display = 'none';
+            document.getElementById('contact-list-view').style.display = 'block';
+            renderContacts();
+        }
+
+        function renderMessages() {
+            let box = document.getElementById('chat-messages-box');
+            box.innerHTML = '';
+            let msgs = appData.messages[activeChatContact] || [];
+            if(msgs.length === 0) {
+                box.innerHTML = '<p style="color:var(--text-gray); font-size:12px; text-align:center; margin-top:20px;">Début de la conversation avec ' + activeChatContact + '</p>';
+                return;
+            }
+            msgs.forEach(m => {
+                box.innerHTML += `<div class="msg ${m.sender === 'me' ? 'sent' : 'received'}">${m.text}</div>`;
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            let input = document.getElementById('chat-msg-input');
+            let text = input.value.trim();
+            if(!text || !activeChatContact) return;
+
+            appData.messages[activeChatContact] = appData.messages[activeChatContact] || [];
+            appData.messages[activeChatContact].push({ sender: 'me', text: text });
+            saveData();
+            input.value = '';
+            renderMessages();
+        }
+
+        function handleKeyPress(e) {
+            if(e.key === 'Enter') {
+                sendChatMessage();
             }
         }
 
-        function resetAccount() {
-            localStorage.clear();
-            location.reload();
+        // Gestion de l'historique des appels
+        function triggerCall() {
+            if(!activeChatContact) return;
+            let now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            appData.calls.unshift({ name: activeChatContact, time: now, type: 'Sortant' });
+            saveData();
+            alert("Appel en cours avec " + activeChatContact + "...");
         }
 
-        renderContacts();
+        function renderCalls() {
+            let list = document.getElementById('call-list');
+            list.innerHTML = '';
+            if(appData.calls.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-gray); font-size: 13px; text-align: center; margin-top: 30px;">Aucun appel récent dans l\'historique.</p>';
+                return;
+            }
+            appData.calls.forEach(call => {
+                list.innerHTML += `
+                    <div class="item-card">
+                        <div>
+                            <strong>${call.name}</strong>
+                            <div style="font-size:11px; color:var(--text-gray); margin-top:2px;">Appel ${call.type} • ${call.time}</div>
+                        </div>
+                        <span style="color:var(--accent-green);">📞</span>
+                    </div>
+                `;
+            });
+        }
+
+        function saveData() {
+            localStorage.setItem('gb_chat_data', JSON.stringify(appData));
+        }
+
+        function resetAppData() {
+            if(confirm("Voulez-vous vraiment réinitialiser toutes les données ?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
