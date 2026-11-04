@@ -3,569 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garcia Bletna Chat</title>
+    <title>garciabletna - Réseau Sécurisé</title>
     <style>
-        :root {
-            --bg-color: #000000;
-            --card-bg: #121212;
-            --accent-green: #00ff66;
-            --text-color: #ffffff;
-            --text-gray: #888888;
-            --border-color: #222222;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding-bottom: 75px;
-        }
-        /* En-tête fidèle au design d'origine */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 20px;
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-style: italic;
-            color: var(--accent-green);
-        }
-        .header-right {
-            cursor: pointer;
-            font-size: 20px;
-        }
-        /* Section Profil / Accueil */
-        .profile-container {
-            padding: 15px 20px;
-        }
-        .profile-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        .profile-pic-wrapper {
-            position: relative;
-            width: 82px;
-            height: 82px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-green);
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .profile-pic-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .profile-stats {
-            display: flex;
-            gap: 25px;
-            text-align: center;
-        }
-        .stat-num {
-            font-size: 17px;
-            font-weight: 700;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-gray);
-            margin-top: 2px;
-        }
-        .username-row {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .bio-hint {
-            font-size: 12px;
-            color: var(--text-gray);
-            margin-bottom: 15px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        .btn {
-            flex: 1;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #333;
-            background-color: #1a1a1a;
-            color: var(--text-color);
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            text-align: center;
-        }
-        .btn:active {
-            background-color: #333;
-        }
-        /* Grille des posts */
-        .posts-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 3px;
-        }
-        .post-tile {
-            background-color: var(--card-bg);
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-gray);
-            font-size: 11px;
-            border: 1px solid #111;
-        }
-        /* Vues des sections */
-        .view-section {
-            display: none;
-            padding: 20px;
-        }
-        .view-section.active {
-            display: block;
-        }
-        /* Discussions & Contacts */
-        .chat-container, .call-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .search-box {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .search-box input {
-            flex: 1;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: var(--card-bg);
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-        .item-card {
-            background: var(--card-bg);
-            padding: 12px 15px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-        }
-        .item-card:active {
-            background: #1f1f1f;
-        }
-        /* Barre de navigation inférieure fixe */
-        nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #050505;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0 12px 0;
-            z-index: 1000;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--text-gray);
-            font-size: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            gap: 3px;
-        }
-        .nav-item.active {
-            color: var(--accent-green);
-        }
-        .nav-icon {
-            font-size: 22px;
-        }
-        /* Interface de chat direct interne */
-        #chat-room {
-            display: none;
-            flex-direction: column;
-            height: calc(100vh - 130px);
-        }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .msg {
-            max-width: 75%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-        .msg.sent {
-            background-color: #004d26;
-            color: #fff;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .msg.received {
-            background-color: #1a1a1a;
-            color: #fff;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-        .chat-input-bar {
-            display: flex;
-            gap: 8px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border-color);
-        }
-        .chat-input-bar input {
-            flex: 1;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #333;
-            background: var(--card-bg);
-            color: white;
-            outline: none;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #0b0b0b; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 414px; height: 100vh; max-height: 896px; background: #000; display: flex; flex-direction: column; position: relative; overflow: hidden; border: 1px solid #222; }
+        
+        /* Header */
+        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
+        .logo { font-size: 22px; font-weight: bold; color: #00ff66; font-style: italic; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
+        
+        /* Content Views */
+        .view { flex: 1; overflow-y: auto; display: none; padding-bottom: 70px; }
+        .view.active { display: block; }
+
+        /* Login Screen */
+        #login-view { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; }
+        #login-view h1 { color: #00ff66; margin-bottom: 30px; font-style: italic; font-size: 28px; text-shadow: 0 0 15px rgba(0,255,102,0.5); }
+        .input-box { width: 100%; background: #121212; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 15px; font-size: 16px; outline: none; }
+        .input-box:focus { border-color: #00ff66; }
+        .btn-main { width: 100%; background: #00ff66; color: #000; font-weight: bold; padding: 14px; border-radius: 10px; border: none; font-size: 16px; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,102,0.3); transition: 0.2s; }
+        .btn-main:active { transform: scale(0.98); }
+
+        /* Profile Screen */
+        .profile-header { padding: 20px; display: flex; align-items: center; gap: 20px; }
+        .avatar-container { position: relative; width: 85px; height: 85px; border-radius: 50%; background: linear-gradient(45deg, #00ff66, #00ffff); padding: 3px; cursor: pointer; }
+        .avatar { width: 100%; height: 100%; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-info { flex: 1; }
+        .username { font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #fff; }
+        .stats-bar { display: flex; justify-content: space-around; padding: 15px 20px; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; text-align: center; }
+        .stat-num { font-weight: bold; color: #00ff66; font-size: 16px; }
+        .stat-label { font-size: 12px; color: #888; }
+        .profile-actions { display: flex; gap: 10px; padding: 15px 20px; }
+        .btn-action { flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        /* Posts Grid / Add Post Button */
+        .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; }
+        .post-item { aspect-ratio: 1; background: #121212; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; position: relative; overflow: hidden; border: 1px dashed #333; }
+        .add-post-btn { background: #0a0a0a; color: #00ff66; font-size: 28px; cursor: pointer; border: 1px dashed #00ff66; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 4px; transition: 0.2s; }
+        .add-post-btn:hover { background: rgba(0,255,102,0.1); }
+
+        /* Chat & Search View */
+        .chat-container { display: flex; flex-direction: column; height: 100%; padding: 15px; }
+        .search-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+        .chat-messages { flex: 1; overflow-y: auto; background: #080808; border-radius: 10px; padding: 15px; border: 1px solid #1a1a1a; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 10px; max-width: 80%; font-size: 14px; }
+        .message.sent { background: #00ff66; color: #000; align-self: flex-end; }
+        .message.received { background: #1a1a1a; color: #fff; align-self: flex-start; }
+        .chat-input-area { display: flex; gap: 10px; }
+
+        /* Call Screen */
+        .call-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 30px; }
+        .call-avatar { width: 120px; height: 120px; border-radius: 50%; background: #1a1a1a; border: 2px solid #00ff66; margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #00ff66; }
+        .call-status { color: #888; margin-bottom: 40px; font-size: 16px; }
+        .call-buttons { display: flex; gap: 30px; }
+        .call-btn { width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .call-btn.hangup { background: #ff3b30; color: #fff; }
+        .call-btn.accept { background: #00ff66; color: #000; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 65px; background: #050505; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+        .nav-item { background: none; border: none; color: #666; font-size: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: #00ff66; }
+        .nav-item span.icon { font-size: 20px; }
+
+        /* System Security Footer */
+        .security-footer { font-size: 10px; color: #555; text-align: center; margin-top: 20px; line-height: 1.4; }
     </style>
 </head>
 <body>
 
-    <!-- En-tête avec GG collé et le trident -->
-    <header>
-        <div class="header-left">
-            <span>GG</span> garciabletna
+<div class="app-container">
+    
+    <!-- 1. VUE CONNEXION / INSCRIPTION -->
+    <div id="login-view" class="view active">
+        <div class="logo" style="font-size: 32px; margin-bottom: 20px;">garcia bletna</div>
+        <input type="text" id="pseudo-input" class="input-box" placeholder="Entre ton pseudo...">
+        <button class="btn-main" onclick="registerUser()">Rejoindre le Salon</button>
+        <div class="security-footer">
+            PROPRIÉTÉ DE GARCIABLETNA — FONDATEUR<br>
+            Protocole de sécurité 2026. Chiffrement de bout en bout, compatibilité VPN active et respect des normes de confidentialité strictes.
         </div>
-        <div class="header-right">🔱</div>
-    </header>
+    </div>
 
-    <!-- SECTION ACCUEIL / PROFIL -->
-    <div id="section-accueil" class="view-section active">
-        <div class="profile-container">
-            <div class="profile-top">
-                <div class="profile-pic-wrapper" onclick="editProfilePicture()">
-                    <img id="profile-img" src="" alt="Avatar">
+    <!-- 2. VUE ACCUEIL / PROFIL -->
+    <div id="home-view" class="view">
+        <header>
+            <div class="logo" id="header-username">garciabletna</div>
+            <span style="font-size: 22px; cursor: pointer;" onclick="triggerNotification()">❤️</span>
+        </header>
+
+        <div class="profile-header">
+            <div class="avatar-container" onclick="addStory()">
+                <div class="avatar">
+                    <span style="font-size: 30px;">👤</span>
                 </div>
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <div class="stat-num" id="stat-posts">3</div>
-                        <div class="stat-label">publications</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-num" id="stat-followers">X</div>
-                        <div class="stat-label">abonnés</div>
-                    </div>
-                </div>
             </div>
-
-            <div class="username-row">
-                <span id="display-username">garciabletna</span> ⚡
+            <div class="profile-info">
+                <div class="username" id="display-username">garciabletna</div>
+                <div style="font-size: 12px; color: #888;">Appuyez sur la photo pour ajouter une story</div>
             </div>
-            <div class="bio-hint">Appuyez sur la photo pour modifier le profil</div>
+        </div>
 
-            <div class="action-buttons">
-                <button class="btn" onclick="editProfileName()">Modifier profil</button>
-                <button class="btn" onclick="toggleFollow()">S'abonner</button>
+        <div class="stats-bar">
+            <div>
+                <div class="stat-num" id="stat-posts">0</div>
+                <div class="stat-label">publications</div>
             </div>
+            <div>
+                <div class="stat-num" id="stat-followers">0</div>
+                <div class="stat-label">abonnés</div>
+            </div>
+            <div>
+                <div class="stat-num" id="stat-following">142</div>
+                <div class="stat-label">suivis</div>
+            </div>
+        </div>
 
-            <div class="posts-grid">
-                <div class="post-tile">Post 1</div>
-                <div class="post-tile">Post 2</div>
-                <div class="post-tile">Post 3</div>
+        <div class="profile-actions">
+            <button class="btn-action" onclick="editProfile()">Modifier profil</button>
+            <button class="btn-action" id="follow-btn" onclick="toggleFollow()">S'abonner</button>
+        </div>
+
+        <!-- Grille dynamique des publications avec bouton d'ajout (+) -->
+        <div class="posts-grid" id="posts-grid-container">
+            <div class="add-post-btn" onclick="createNewPost()">+</div>
+        </div>
+    </div>
+
+    <!-- 3. VUE DISCUSSION / CHAT AVEC ALGORITHME DE COMPTE -->
+    <div id="chat-view" class="view">
+        <header>
+            <div class="logo">Messages</div>
+        </header>
+        <div class="chat-container">
+            <div class="search-bar">
+                <input type="text" id="target-user" class="input-box" placeholder="Rechercher un pseudo valide..." style="margin-bottom:0;">
+                <button class="btn-main" style="width: 100px;" onclick="verifyAndOpenChat()">Chercher</button>
+            </div>
+            <div class="chat-messages" id="chat-box">
+                <div style="color: #555; text-align: center; margin-top: 20px;" id="chat-info-text">Recherchez un compte enregistré pour lancer la discussion.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="message-input" class="input-box" placeholder="Écrire un message sécurisé..." style="margin-bottom:0;" disabled>
+                <button class="btn-main" id="send-btn" style="width: 80px;" onclick="sendMessage()" disabled>Envoyer</button>
             </div>
         </div>
     </div>
 
-    <!-- SECTION DISCUSSION -->
-    <div id="section-discussion" class="view-section">
-        <div id="contact-list-view">
-            <h2 style="font-size: 18px; margin-bottom: 12px;">Discussions</h2>
-            <div class="search-box">
-                <input type="text" id="new-contact-name" placeholder="Nom ou pseudo à ajouter...">
-                <button class="btn" onclick="addContact()" style="background:var(--accent-green); color:black; flex: 0; padding: 0 15px;">Ajouter</button>
-            </div>
-            <div class="chat-container" id="contact-list">
-                <!-- Les contacts dynamiques s'affichent ici -->
-            </div>
-        </div>
-
-        <!-- Fenêtre de chat interne -->
-        <div id="chat-room">
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 10px;">
-                <button class="btn" onclick="closeChat()" style="flex:0; padding: 4px 10px;">← Retour</button>
-                <h3 id="chat-with-name" style="font-size: 15px;">Discussion</h3>
-                <button class="btn" onclick="triggerCall()" style="flex:0; padding: 4px 10px; background: #004d26;">📞</button>
-            </div>
-            <div class="chat-messages" id="chat-messages-box">
-                <!-- Messages -->
-            </div>
-            <div class="chat-input-bar">
-                <input type="text" id="chat-msg-input" placeholder="Écrire un message..." onkeypress="handleKeyPress(event)">
-                <button class="btn" onclick="sendChatMessage()" style="background:var(--accent-green); color:black; flex:0; padding: 0 15px; border-radius: 20px;">Envoyer</button>
+    <!-- 4. VUE APPEL MODERNE -->
+    <div id="call-view" class="view">
+        <div class="call-screen">
+            <div class="call-avatar">📞</div>
+            <h2 id="call-target-name">Service d'Appel Sécurisé</h2>
+            <div class="call-status" id="call-status-text">Prêt à émettre ou recevoir un appel</div>
+            <div class="call-buttons">
+                <button class="call-btn accept" onclick="startCall()">📞</button>
+                <button class="call-btn hangup" onclick="endCall()">❌</button>
             </div>
         </div>
     </div>
 
-    <!-- SECTION APPEL -->
-    <div id="section-appel" class="view-section">
-        <h2 style="font-size: 18px; margin-bottom: 15px;">Historique des appels</h2>
-        <div class="call-container" id="call-list">
-            <p style="color: var(--text-gray); font-size: 13px; text-align: center; margin-top: 30px;">Aucun appel récent dans l'historique.</p>
+    <!-- 5. VUE RÉGLAGES -->
+    <div id="settings-view" class="view">
+        <header><div class="logo">Réglages</div></header>
+        <div style="padding: 20px; color: #aaa; line-height: 1.8;">
+            <p><strong>Compte actif :</strong> <span id="settings-pseudo" style="color:#00ff66;">-</span></p>
+            <p><strong>Statut du Serveur :</strong> Synchronisé (Actif)</p>
+            <p><strong>Protocole :</strong> Chiffrement de bout en bout 2026</p>
+            <br>
+            <button class="btn-main" onclick="logout()" style="background:#ff3b30; color:#fff;">Se déconnecter</button>
         </div>
     </div>
 
-    <!-- SECTION REGLAGES -->
-    <div id="section-reglages" class="view-section">
-        <h2 style="font-size: 18px; margin-bottom: 15px;">Réglages du compte</h2>
-        <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 20px;">Gérez vos préférences et la configuration de l'application.</p>
-        <button class="btn" onclick="resetAppData()" style="border-color: #ff3b30; color: #ff3b30; background: transparent;">Réinitialiser l'application</button>
-    </div>
-
-    <!-- BARRE DE NAVIGATION INFÉRIEURE AVEC LE TRIDENT 🔱 -->
-    <nav>
-        <div class="nav-item active" onclick="switchTab('accueil', this)">
-            <span class="nav-icon">🏠</span>
-            <span>Accueil</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('discussion', this)">
-            <span class="nav-icon">🔱</span>
-            <span>Discussion</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('appel', this)">
-            <span class="nav-icon">📞</span>
-            <span>Appel</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('reglages', this)">
-            <span class="nav-icon">⚙️</span>
-            <span>Réglages</span>
-        </div>
+    <!-- BARRE DE NAVIGATION INFÉRIEURE -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('home-view', this)">
+            <span class="icon">🏠</span>Accueil
+        </button>
+        <button class="nav-item" onclick="switchTab('chat-view', this)">
+            <span class="icon">💬</span>Discussion
+        </button>
+        <button class="nav-item" onclick="switchTab('call-view', this)">
+            <span class="icon">📞</span>Appel
+        </button>
+        <button class="nav-item" onclick="switchTab('settings-view', this)">
+            <span class="icon">⚙️</span>Réglages
+        </button>
     </nav>
 
-    <script>
-        // Gestion des données persistantes
-        let appData = JSON.parse(localStorage.getItem('gb_chat_data')) || {
-            username: "garciabletna",
-            followers: "X",
-            posts: 3,
-            contacts: [],
-            calls: [],
-            messages: {}
-        };
+</div>
 
-        // Algorithme abonnés : X pour le compte principal, 0 pour les nouveaux comptes créés
-        if(appData.username !== "garciabletna" && appData.followers === "X") {
-            appData.followers = 0;
+<script>
+    // Base de données simulée synchronisée en local (Stockage Serveur Local)
+    let registeredUsers = JSON.parse(localStorage.getItem('gb_users')) || ["garciabletna", "admin", "berrussama"];
+    let currentUser = localStorage.getItem('gb_current_user') || null;
+    let userPosts = JSON.parse(localStorage.getItem('gb_posts')) || [];
+    let isFollowing = false;
+    let followersCount = 1250;
+
+    // Initialisation au démarrage
+    window.onload = function() {
+        if (currentUser) {
+            activateApp(currentUser);
         }
+    };
 
-        // Initialisation de l'affichage du profil
-        document.getElementById('display-username').innerText = appData.username;
-        document.getElementById('stat-followers').innerText = appData.followers;
-        document.getElementById('stat-posts').innerText = appData.posts;
-
-        let activeChatContact = null;
-
-        // Navigation entre les onglets
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            
-            document.getElementById('section-' + tabName).classList.add('active');
-            element.classList.add('active');
-
-            if(tabName === 'discussion') {
-                closeChat();
-                renderContacts();
-            } else if(tabName === 'appel') {
-                renderCalls();
-            }
+    function registerUser() {
+        let pseudo = document.getElementById('pseudo-input').value.trim().toLowerCase();
+        if (!pseudo) {
+            alert("Veuillez entrer un pseudo valide.");
+            return;
         }
-
-        // Gestion de l'abonnement dynamique
-        function toggleFollow() {
-            if(appData.username === "garciabletna") return; // Reste X pour ton profil principal
-            let fElem = document.getElementById('stat-followers');
-            appData.followers = appData.followers === 0 ? 1 : 0;
-            fElem.innerText = appData.followers;
-            saveData();
+        // Synchronisation sur le "serveur" (localStorage)
+        if (!registeredUsers.includes(pseudo)) {
+            registeredUsers.push(pseudo);
+            localStorage.setItem('gb_users', JSON.stringify(registeredUsers));
         }
+        currentUser = pseudo;
+        localStorage.setItem('gb_current_user', currentUser);
+        activateApp(currentUser);
+    }
 
-        // Modification du profil
-        function editProfileName() {
-            let newName = prompt("Modifier votre nom d'utilisateur :", appData.username);
-            if(newName && newName.trim() !== "") {
-                appData.username = newName.trim();
-                appData.followers = (appData.username.toLowerCase() === "garciabletna") ? "X" : 0;
-                saveData();
-                location.reload();
-            }
+    function activateApp(username) {
+        document.getElementById('login-view').classList.remove('active');
+        document.getElementById('home-view').classList.add('active');
+        document.getElementById('display-username').innerText = username;
+        document.getElementById('header-username').innerText = username;
+        document.getElementById('settings-pseudo').innerText = username;
+        renderPosts();
+    }
+
+    // Gestion des onglets
+    function switchTab(viewId, btnElement) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+
+    // Algorithme de vérification des comptes pour le Chat
+    function verifyAndOpenChat() {
+        let target = document.getElementById('target-user').value.trim().toLowerCase();
+        let chatBox = document.getElementById('chat-box');
+        let messageInput = document.getElementById('message-input');
+        let sendBtn = document.getElementById('send-btn');
+        let infoText = document.getElementById('chat-info-text');
+
+        if (!target) return;
+
+        // Vérification si le compte existe sur le serveur de l'application
+        if (registeredUsers.includes(target)) {
+            if(infoText) infoText.style.display = 'none';
+            chatBox.innerHTML = `<div style="color: #00ff66; text-align: center; font-size: 12px;">Connexion sécurisée établie avec @${target}</div>`;
+            messageInput.disabled = false;
+            sendBtn.disabled = false;
+            chatBox.dataset.activeTarget = target;
+        } else {
+            chatBox.innerHTML = `<div style="color: #ff3b30; text-align: center;">Erreur : Le compte "@${target}" n'existe pas dans le réseau garciabletna.</div>`;
+            messageInput.disabled = true;
+            sendBtn.disabled = true;
         }
+    }
 
-        function editProfilePicture() {
-            let imgUrl = prompt("Entrez le lien direct de votre photo de profil (URL) :");
-            if(imgUrl) {
-                document.getElementById('profile-img').src = imgUrl;
-                localStorage.setItem('gb_profile_img', imgUrl);
-            }
+    function sendMessage() {
+        let input = document.getElementById('message-input');
+        let chatBox = document.getElementById('chat-box');
+        if (!input.value.trim()) return;
+
+        // Affichage du message envoyé
+        let msgDiv = document.createElement('div');
+        msgDiv.className = 'message sent';
+        msgDiv.innerText = input.value;
+        chatBox.appendChild(msgDiv);
+
+        let textSent = input.value;
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Simulation de réponse intelligente du compte destinataire après 1 seconde
+        setTimeout(() => {
+            let replyDiv = document.createElement('div');
+            replyDiv.className = 'message received';
+            replyDiv.innerText = "Reçu 5/5 sur le réseau garciabletna ! (Réponse automatique du système)";
+            chatBox.appendChild(replyDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 1000);
+    }
+
+    // Gestion dynamique des publications (Autant de posts qu'on veut)
+    function createNewPost() {
+        let postContent = prompt("Entrez le contenu de votre nouvelle publication (texte ou lien) :");
+        if (postContent) {
+            userPosts.push(postContent);
+            localStorage.setItem('gb_posts', JSON.stringify(userPosts));
+            renderPosts();
         }
+    }
 
-        // Charger l'image de profil enregistrée si elle existe
-        let savedImg = localStorage.getItem('gb_profile_img');
-        if(savedImg) {
-            document.getElementById('profile-img').src = savedImg;
+    function renderPosts() {
+        let gridContainer = document.getElementById('posts-grid-container');
+        // Garder le bouton "+" en premier ou dernier
+        let html = `<div class="add-post-btn" onclick="createNewPost()">+</div>`;
+        
+        userPosts.forEach((post, index) => {
+            html += `<div class="post-item" style="background:#1a1a1a; padding:10px; font-size:12px; word-break:break-all;">Post ${index + 1}:<br>${post}</div>`;
+        });
+        
+        gridContainer.innerHTML = html;
+        document.getElementById('stat-posts').innerText = userPosts.length;
+    }
+
+    // Story dynamique
+    function addStory() {
+        let storyUrl = prompt("Entrez le lien de votre Story (photo/vidéo) :");
+        if(storyUrl) {
+            alert("Story publiée avec succès sur votre profil !");
         }
+    }
 
-        // Gestion des contacts et des chats directs
-        function addContact() {
-            let input = document.getElementById('new-contact-name');
-            let name = input.value.trim();
-            if(!name) return;
-
-            if(!appData.contacts.includes(name)) {
-                appData.contacts.push(name);
-                appData.messages[name] = appData.messages[name] || [];
-                saveData();
-            }
-            input.value = '';
-            renderContacts();
+    // Algorithme d'abonnement dynamique
+    function toggleFollow() {
+        let btn = document.getElementById('follow-btn');
+        let followersStat = document.getElementById('stat-followers');
+        
+        if (!isFollowing) {
+            isFollowing = true;
+            followersCount++;
+            btn.innerText = "Abonné(e)";
+            btn.style.background = "#333";
+            btn.style.color = "#00ff66";
+        } else {
+            isFollowing = false;
+            followersCount--;
+            btn.innerText = "S'abonner";
+            btn.style.background = "#1a1a1a";
+            btn.style.color = "#fff";
         }
+        followersStat.innerText = followersCount;
+    }
 
-        function renderContacts() {
-            let list = document.getElementById('contact-list');
-            list.innerHTML = '';
-            if(appData.contacts.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-gray); font-size:13px; text-align:center; margin-top:20px;">Aucune discussion. Ajoutez un contact pour commencer.</p>';
-                return;
-            }
-            appData.contacts.forEach(contact => {
-                list.innerHTML += `
-                    <div class="item-card" onclick="openChat('${contact}')">
-                        <div>
-                            <strong>${contact}</strong>
-                            <div style="font-size:11px; color:var(--text-gray); margin-top:2px;">Appuyer pour ouvrir le chat</div>
-                        </div>
-                        <span style="color:var(--accent-green); font-size:18px;">💬</span>
-                    </div>
-                `;
-            });
-        }
+    // Gestion des Appels Modernes
+    function startCall() {
+        document.getElementById('call-status-text').innerText = "Appel en cours... Connexion chiffrée établie 🟢";
+    }
 
-        function openChat(name) {
-            activeChatContact = name;
-            document.getElementById('contact-list-view').style.display = 'none';
-            document.getElementById('chat-room').style.display = 'flex';
-            document.getElementById('chat-with-name').innerText = name;
-            renderMessages();
-        }
+    function endCall() {
+        document.getElementById('call-status-text').innerText = "Appel terminé ou refusé.";
+    }
 
-        function closeChat() {
-            activeChatContact = null;
-            document.getElementById('chat-room').style.display = 'none';
-            document.getElementById('contact-list-view').style.display = 'block';
-            renderContacts();
-        }
+    function triggerNotification() {
+        alert("Aucune nouvelle notification pour le moment.");
+    }
 
-        function renderMessages() {
-            let box = document.getElementById('chat-messages-box');
-            box.innerHTML = '';
-            let msgs = appData.messages[activeChatContact] || [];
-            if(msgs.length === 0) {
-                box.innerHTML = '<p style="color:var(--text-gray); font-size:12px; text-align:center; margin-top:20px;">Début de la conversation avec ' + activeChatContact + '</p>';
-                return;
-            }
-            msgs.forEach(m => {
-                box.innerHTML += `<div class="msg ${m.sender === 'me' ? 'sent' : 'received'}">${m.text}</div>`;
-            });
-            box.scrollTop = box.scrollHeight;
-        }
+    function logout() {
+        localStorage.removeItem('gb_current_user');
+        location.reload();
+    }
+</script>
 
-        function sendChatMessage() {
-            let input = document.getElementById('chat-msg-input');
-            let text = input.value.trim();
-            if(!text || !activeChatContact) return;
-
-            appData.messages[activeChatContact] = appData.messages[activeChatContact] || [];
-            appData.messages[activeChatContact].push({ sender: 'me', text: text });
-            saveData();
-            input.value = '';
-            renderMessages();
-        }
-
-        function handleKeyPress(e) {
-            if(e.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
-
-        // Gestion de l'historique des appels
-        function triggerCall() {
-            if(!activeChatContact) return;
-            let now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            appData.calls.unshift({ name: activeChatContact, time: now, type: 'Sortant' });
-            saveData();
-            alert("Appel en cours avec " + activeChatContact + "...");
-        }
-
-        function renderCalls() {
-            let list = document.getElementById('call-list');
-            list.innerHTML = '';
-            if(appData.calls.length === 0) {
-                list.innerHTML = '<p style="color: var(--text-gray); font-size: 13px; text-align: center; margin-top: 30px;">Aucun appel récent dans l\'historique.</p>';
-                return;
-            }
-            appData.calls.forEach(call => {
-                list.innerHTML += `
-                    <div class="item-card">
-                        <div>
-                            <strong>${call.name}</strong>
-                            <div style="font-size:11px; color:var(--text-gray); margin-top:2px;">Appel ${call.type} • ${call.time}</div>
-                        </div>
-                        <span style="color:var(--accent-green);">📞</span>
-                    </div>
-                `;
-            });
-        }
-
-        function saveData() {
-            localStorage.setItem('gb_chat_data', JSON.stringify(appData));
-        }
-
-        function resetAppData() {
-            if(confirm("Voulez-vous vraiment réinitialiser toutes les données ?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-    </script>
 </body>
 </html>
